@@ -1,4 +1,7 @@
 *.pyc
 *.bak
 *.db
+.*.swp
 local_settings.py
+django_freetext.egg-info
+dist
