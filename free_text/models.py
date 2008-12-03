@@ -11,10 +11,6 @@ class FreeText(models.Model):
     content = models.TextField('content', blank=True)
     active = models.BooleanField("active", default=False)
 
-    class Admin:
-        list_display = ('key','active')
-        search_fields = ('key', 'content')
-
     class Meta:
         verbose_name = 'free text'
         verbose_name_plural = 'free texts'
