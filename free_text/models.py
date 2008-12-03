@@ -6,7 +6,7 @@ class FreeText(models.Model):
     can be inserted into any template with the use of a special template
     tag
     """
-    key = models.CharField(max_length=255, unique=True
+    slug = models.CharField(max_length=255, unique=True
                 help_text="A unique name for this content")
     content = models.TextField(blank=True, null=True)
 
