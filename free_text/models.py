@@ -6,7 +6,7 @@ class FreeText(models.Model):
     into any template with the use of a special template tag.
     
     """
-    slug = models.CharField(max_length=255, unique=True
+    slug = models.CharField(max_length=255, unique=True,
                 help_text="A unique name used for reference in the templates")
     header = models.CharField(blank=True, null=True, max_length=255,
                 help_text="An optional header for this content")
