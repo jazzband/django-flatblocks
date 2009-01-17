@@ -4,7 +4,7 @@ from django.core.cache import cache
 
 register = template.Library()
 
-FreeText = models.get_model('freetext', 'freetext')
+FreeText = models.get_model('free_text', 'freetext')
 CACHE_PREFIX = "freetext_"
 
 def do_get_freetext(parser, token):
@@ -33,7 +33,7 @@ class FreeTextNode(template.Node):
             cache_key = CACHE_PREFIX + self.slug
             c = cache.get(cache_key)
             if c is None:
-                c = FreeText.objects.get(slug=self.slug, active=True)
+                c = FreeText.objects.get(slug=self.slug)
                 cache.set(cache_key, c, int(self.cache_time))
             content = c.content
         except FreeText.DoesNotExist:

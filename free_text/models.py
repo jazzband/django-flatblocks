@@ -13,5 +13,5 @@ class FreeText(models.Model):
     content = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
-        return u"%s" % (self.key,)
+        return u"%s" % (self.slug,)
 
