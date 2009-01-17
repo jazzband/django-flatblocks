@@ -1,3 +1,31 @@
+"""
+This module offers one templatetag called "freetext" which allows you to
+easily embed small text-snippets (like for example the help section of a page)
+into a template.
+
+It accepts 2 parameter:
+
+    slug
+        The slug/key of the text (for example 'contact_help'). This slug has
+        to be passed with quotes to the templatetag.
+
+    cache_time
+        The number of seconds that text should get cached after it has been
+        fetched from the database.
+        
+        This field is option and defaults to no caching.
+        
+Example::
+    
+    {% load freetext %}
+    
+    ...
+    
+    {% freetext 'contact_help' %}
+    
+
+"""
+
 from django import template
 from django.db import models
 from django.core.cache import cache
