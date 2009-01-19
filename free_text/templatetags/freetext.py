@@ -40,51 +40,70 @@ register = template.Library()
 FreeText = models.get_model('free_text', 'freetext')
 CACHE_PREFIX = "freetext_"
 
-def do_get_freetext(parser, token):
-    # split_contents() knows not to split quoted strings.
-    tokens = token.split_contents()
-    is_variable = False
-    real_slug = None
-    if len(tokens) < 2 or len(tokens) > 3:
-        raise template.TemplateSyntaxError, "%r tag should have either 2 or 3 arguments" % (tokens[0],)
-    if len(tokens) == 2:
-        tag_name, slug = tokens
-        cache_time = 0
-    if len(tokens) == 3:
-        tag_name, slug, cache_time = tokens
-    # Check to see if the slug is properly double/single quoted
-    if not (slug[0] == slug[-1] and slug[0] in ('"', "'")):
-        is_variable = True
-        real_slug = slug
-    else:
-        real_slug = slug[1:-1]
-    # Send slug without quotes and caching time
-    return FreeTextNode(real_slug, is_variable, cache_time)
+class BasicFreeTextWrapper(object):
+    def prepare(self, parser, token):
+        tokens = token.split_contents()
+        self.is_variable = False
+        self.slug = None
+        if len(tokens) < 2 or len(tokens) > 3:
+            raise template.TemplateSyntaxError, "%r tag should have either 2 or 3 arguments" % (tokens[0],)
+        if len(tokens) == 2:
+            tag_name, slug = tokens
+            self.cache_time = 0
+        if len(tokens) == 3:
+            tag_name, slug, self.cache_time = tokens
+        # Check to see if the slug is properly double/single quoted
+        if not (slug[0] == slug[-1] and slug[0] in ('"', "'")):
+            self.is_variable = True
+            self.slug = slug
+        else:
+            self.slug = slug[1:-1]
+    
+    def __call__(self, parser, token):
+        self.prepare(parser, token)
+        return FreeTextNode(self.slug, self.is_variable, self.cache_time)
+
+class PlainFreeTextWrapper(BasicFreeTextWrapper):
+    def __call__(self, parser, token):
+        self.prepare(parser, token)
+        return FreeTextNode(self.slug, self.is_variable, self.cache_time, False)
+
+do_get_freetext = BasicFreeTextWrapper()
+do_plain_freetext = PlainFreeTextWrapper()
     
 class FreeTextNode(template.Node):
-    def __init__(self, slug, is_variable, cache_time=0):
+    def __init__(self, slug, is_variable, cache_time=0, with_template=True):
        self.slug = slug
        self.is_variable = is_variable
        self.cache_time = cache_time
+       self.with_template = with_template
     
     def render(self, context):
         if self.is_variable:
             real_slug = template.Variable(self.slug).resolve(context)
         else:
             real_slug = self.slug
+        # Eventually we want to pass the whole context to the template so that
+        # users have the maximum of flexibility of what to do in there.
+        if self.with_template:
+            if 'request' in context:
+                new_ctx = template.RequestContext(context['request'], {})
+            else:
+                new_ctx = template.Context({})
         try:
             cache_key = CACHE_PREFIX + real_slug
             c = cache.get(cache_key)
             if c is None:
                 c = FreeText.objects.get(slug=real_slug)
                 cache.set(cache_key, c, int(self.cache_time))
-            tmpl = template.loader.get_template('freetext/freetext.html')
-            if 'request' in context:
-                ctx = template.RequestContext(context['request'], {'freetext': c})
+            if self.with_template:
+                tmpl = template.loader.get_template('freetext/freetext.html')
+                new_ctx.update({'freetext':c})
+                return tmpl.render(new_ctx)
             else:
-                ctx = template.Context({'freetext': c})
-            return tmpl.render(ctx)
+                return c.content
         except FreeText.DoesNotExist:
             return ''
-        
+
 register.tag('freetext', do_get_freetext)
+register.tag('plain_freetext', do_plain_freetext)
