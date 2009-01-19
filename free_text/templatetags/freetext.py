@@ -78,9 +78,13 @@ class FreeTextNode(template.Node):
             if c is None:
                 c = FreeText.objects.get(slug=real_slug)
                 cache.set(cache_key, c, int(self.cache_time))
-            content = c.content
+            tmpl = template.loader.get_template('freetext/freetext.html')
+            if 'request' in context:
+                ctx = template.RequestContext(context['request'], {'freetext': c})
+            else:
+                ctx = template.Context({'freetext': c})
+            return tmpl.render(ctx)
         except FreeText.DoesNotExist:
-            content = ''
-        return content
+            return ''
         
 register.tag('freetext', do_get_freetext)
