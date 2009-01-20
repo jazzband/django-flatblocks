@@ -1,6 +1,6 @@
 from django.db import models
 
-class FreeText(models.Model):
+class FlatBlock(models.Model):
     """
     A piece of content associated with a unique slug that can be inserted 
     into any template with the use of a special template tag.

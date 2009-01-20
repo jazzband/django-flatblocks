@@ -1,5 +1,5 @@
 """
-This module offers one templatetag called "freetext" which allows you to
+This module offers one templatetag called "flatblock" which allows you to
 easily embed small text-snippets (like for example the help section of a page)
 into a template.
 
@@ -21,16 +21,16 @@ It accepts 2 parameter:
         
 Example::
     
-    {% load freetext %}
+    {% load floatblock_tags %}
     
     ...
     
-    {% freetext 'contact_help' %}
-    {% freetext name_in_variable %}
+    {% flatblock 'contact_help' %}
+    {% flatblock name_in_variable %}
     
-The 'freetext' template tag acts like an inclusiontag and operates on the 
-``freetext/freetext.html`` template file, which gets (besides the global
-context) also the ``freetext`` variable passed. 
+The 'flatblock' template tag acts like an inclusiontag and operates on the 
+``flatblock/flatblock.html`` template file, which gets (besides the global
+context) also the ``flatblock`` variable passed. 
 
 Compared to the original implementation this includes not only the block's
 content but the whole object inclusing title, slug and id. This way you 
@@ -45,10 +45,10 @@ from django.core.cache import cache
 
 register = template.Library()
 
-FreeText = models.get_model('free_text', 'freetext')
-CACHE_PREFIX = "freetext_"
+FlatBlock = models.get_model('flatblocks', 'flatblock')
+CACHE_PREFIX = "flatblock_"
 
-class BasicFreeTextWrapper(object):
+class BasicFlatBlockWrapper(object):
     def prepare(self, parser, token):
         tokens = token.split_contents()
         self.is_variable = False
@@ -69,17 +69,17 @@ class BasicFreeTextWrapper(object):
     
     def __call__(self, parser, token):
         self.prepare(parser, token)
-        return FreeTextNode(self.slug, self.is_variable, self.cache_time)
+        return FlatBlockNode(self.slug, self.is_variable, self.cache_time)
 
-class PlainFreeTextWrapper(BasicFreeTextWrapper):
+class PlainFlatBlockWrapper(BasicFlatBlockWrapper):
     def __call__(self, parser, token):
         self.prepare(parser, token)
-        return FreeTextNode(self.slug, self.is_variable, self.cache_time, False)
+        return FlatBlockNode(self.slug, self.is_variable, self.cache_time, False)
 
-do_get_freetext = BasicFreeTextWrapper()
-do_plain_freetext = PlainFreeTextWrapper()
+do_get_flatblock = BasicFlatBlockWrapper()
+do_plain_flatblock = PlainFlatBlockWrapper()
     
-class FreeTextNode(template.Node):
+class FlatBlockNode(template.Node):
     def __init__(self, slug, is_variable, cache_time=0, with_template=True):
        self.slug = slug
        self.is_variable = is_variable
@@ -100,16 +100,16 @@ class FreeTextNode(template.Node):
             cache_key = CACHE_PREFIX + real_slug
             c = cache.get(cache_key)
             if c is None:
-                c = FreeText.objects.get(slug=real_slug)
+                c = FlatBlock.objects.get(slug=real_slug)
                 cache.set(cache_key, c, int(self.cache_time))
             if self.with_template:
-                tmpl = template.loader.get_template('freetext/freetext.html')
-                new_ctx.update({'freetext':c})
+                tmpl = template.loader.get_template('flatblocks/flatblock.html')
+                new_ctx.update({'flatblock':c})
                 return tmpl.render(new_ctx)
             else:
                 return c.content
-        except FreeText.DoesNotExist:
+        except FlatBlock.DoesNotExist:
             return ''
 
-register.tag('freetext', do_get_freetext)
-register.tag('plain_freetext', do_plain_freetext)
+register.tag('flatblock', do_get_flatblock)
+register.tag('plain_flatblock', do_plain_flatblock)
