@@ -21,7 +21,7 @@ It accepts 2 parameter:
         
 Example::
     
-    {% load floatblock_tags %}
+    {% load flatblock_tags %}
     
     ...
     

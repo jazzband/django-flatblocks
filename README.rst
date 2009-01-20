@@ -1,7 +1,7 @@
-django-freetext
-================
+django-flatblocks
+=================
 
-django-freetext is a simple application for handling small text-blocks on
+django-flatblocks is a simple application for handling small text-blocks on
 websites. Think about it like ``django.contrib.flatpages`` just not for a 
 whole page but for only parts of it, like an information text describing what
 you can do on a site.
@@ -9,10 +9,10 @@ you can do on a site.
 Usage
 ------------
 
-Once you've created some instances of the ``free_text.models.FreeText`` model, 
-you can load it it using the ``freetext`` templatetag-library::
+Once you've created some instances of the ``flatblocks.models.FlatBlock``
+model, you can load it it using the ``flatblock_tags`` templatetag-library::
     
-    {% load freetext %}
+    {% load flatblock_tags %}
     
     <html>
         <head>
@@ -24,7 +24,7 @@ you can load it it using the ``freetext`` templatetag-library::
                     <!-- ... -->
                 </div>
                 <div id="sidebar">
-                    {% freetext "page.info" %}
+                    {% flatblock "page.info" %}
                 </div>
             </div>
         </body>
@@ -36,7 +36,7 @@ have the name of a block in a template variable, leave out the quotes.
 This tag also accepts an optional argument where you can specify the number
 of seconds, the that block should be cached::
     
-    {% freetext "page.info" 3600 %}
+    {% flatblock "page.info" 3600 %}
 
 
 History
@@ -57,7 +57,7 @@ integrate some of the features developed by Håkan Waara and Sam Cranford in
 the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 
 
-.. _`original fork`: http://github.com/howiworkdaily/django-freetext/
+.. _`original fork`: http://github.com/howiworkdaily/django-flatblock/
 .. _`django-chunks`: http://code.google.com/p/django-chunks/
 .. _`django-better-chunks`: http://bitbucket.org/hakanw/django-better-chunks/
-.. _`forked by Peter Baumgardner`: http://github.com/lincolnloop/django-freetext/
+.. _`forked by Peter Baumgardner`: http://github.com/lincolnloop/django-flatblock/

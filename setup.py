@@ -3,8 +3,9 @@ from setuptools import setup, find_packages
 setup(
     name = 'django-flatblocks',
     version = '0.1.0',
-    description = 'django-flatblocks allows you to associate a piece of html code '
-                  'with some unique key, and then use this key to insert date into a page.',
+    description = 'django-flatblocks allows you to associate a piece of html '
+                  'code with some unique key, and then use this key to insert '
+                  'date into a page.',
     long_description = open('README.rst').read(),
     keywords = 'django apps',
     license = 'New BSD License',
@@ -12,7 +13,7 @@ setup(
     author_email = 'zerok@zerokspot.com',
     url = 'http://github.com/zerok/django-flatblocks/',
     dependency_links = [],
-    classifiers=[
+    classifiers = [
         'Development Status :: 3 - Alpha',
         'Environment :: Plugins',
         'Framework :: Django',
