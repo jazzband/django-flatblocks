@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
+from flatblocks import get_version
 
 setup(
     name = 'django-flatblocks',
-    version = '0.1.0',
+    version = get_version(),
     description = 'django-flatblocks allows you to associate a piece of html '
                   'code with some unique key, and then use this key to insert '
                   'date into a page.',
@@ -24,5 +25,6 @@ setup(
     ],
     packages = find_packages(),
     include_package_data = True,
+    zip_safe = False,
 )
 
