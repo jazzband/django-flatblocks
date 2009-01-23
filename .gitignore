@@ -2,6 +2,9 @@
 *.bak
 *.db
 .*.swp
+._*
+README.html
 local_settings.py
-django_freetext.egg-info
+django_flatblocks.egg-info
 dist
+build
