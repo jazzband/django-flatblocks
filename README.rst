@@ -53,7 +53,7 @@ by Peter Baumgardner`_ who removed that flag again and added a "header"-field
 in order to directly associate and optional title with each text block.
 
 This fork aims now to add more features like variable chunks and also
-integrate some of the features developed by Håkan Waara and Sam Cranford in
+integrate some of the features developed by H. Waara and S. Cranford in
 the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 
 
