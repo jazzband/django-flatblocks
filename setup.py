@@ -4,9 +4,9 @@ from flatblocks import get_version
 setup(
     name = 'django-flatblocks',
     version = get_version(),
-    description = 'django-flatblocks allows you to associate a piece of html '
-                  'code with some unique key, and then use this key to insert '
-                  'date into a page.',
+    description = 'django-flatblocks acts like django.contrib.flatpages but '
+                  'for parts of a page; like an editable help box you want '
+                  'show alongside the main content.',
     long_description = open('README.rst').read(),
     keywords = 'django apps',
     license = 'New BSD License',
