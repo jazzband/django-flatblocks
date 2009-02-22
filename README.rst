@@ -38,6 +38,72 @@ of seconds, the that block should be cached::
     
     {% flatblock "page.info" 3600 %}
 
+edit-view
+---------
+
+With ``flatblocks.views.edit`` django-flatblocks offers a simple view to edit
+your flatblocks from your frontend. To use it simply include it in your
+URLconf and create a ``flatblocks/edit.html`` template.
+
+By default the view doesn't do any permission checking, so you should decorate
+it accordingly in your URLconf::
+    
+    from flatblocks.views import edit
+    from django.contrib.auth.decorators import login_required
+
+    # ...
+
+    urlpatterns = pattern('',
+        url(r'^flatblocks/(?P<pk>\d+)/edit/$', login_required(edit),
+            name='flatblocks-edit'),
+        # ...
+        )
+
+The template can operate on following variables:
+
+* ``form``
+* ``flatblock``
+* ``origin`` (the URL of the previous page)
+
+Additionally the view offers some basic customization hooks via these keyword
+arguments:
+
+``template_name``
+    Name of the template to be used for rendering this view. By default
+    ``flatblocks/edit.html`` is used.
+
+``success_url``
+    After successfully editing a flatblock the view will redirect the user to
+    the URL specified here. By default the view will try to determine the last
+    visited page before entering the edit-view (which is normally a page where
+    the flatblock is used) and redirect the user back there.
+
+``modelform_class``
+    If you want to use a customized ModelForm class for flatblocks you can
+    specify it here.
+
+``permission_check``
+    This argument lets you specify a callback function to do some
+    flatblock-specific permission checking. Such a function could look like
+    this::
+        
+        def my_permcheck(request, flatblock):
+            if request.user.is_staff or flatblock.slug == 'free_for_all':
+                return True
+            return HttpResponseRedirect('/')
+    
+    With this permission callback set, a user that is not a staff-user is not
+    allowed to edit this view unless it's the "free_for_all" block. If these
+    criteria are not met, the user is redirected to the root URL of the page. 
+
+    The contract here is pretty simple. The permission callback should return
+    ``False``, if the user should receive a 403 message when trying to edit
+    this link. If the function returns an instance of ``HttpResponse`` the
+    view will proceed from the assumption that your view already did
+    everything there is to do and return that response-object. Any other
+    return value tells the view that the permissions are OK for the current
+    user and that it should proceed.
+
 
 History
 ------------
