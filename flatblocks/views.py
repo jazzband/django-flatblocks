@@ -7,7 +7,8 @@ from flatblocks.models import FlatBlock
 from flatblocks.forms import FlatBlockForm
 
 
-def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None):
+def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
+        template_name='flatblocks/edit.html', success_url=None):
     """
     This view provides a simple editor implementation for flatblocks.
 
@@ -53,14 +54,15 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None):
             instance.slug = flatblock.slug
             instance.save()
             del request.session[session_key]
-            return HttpResponseRedirect(origin)
+            redirect_to = success_url and success_url or origin
+            return HttpResponseRedirect(redirect_to)
     else:
         origin = request.META.get('HTTP_REFERER', '/')
         # Don't set origin to this view's url no matter what
         origin = origin == request.get_full_path() and request.session.get(session_key, '/') or origin
         form = modelform_class(instance=flatblock)
         request.session[session_key] = origin
-    return render_to_response('flatblocks/edit.html', RequestContext(request, {
+    return render_to_response(template_name, RequestContext(request, {
         'form': form,
         'origin': origin,
         'flatblock': flatblock,
