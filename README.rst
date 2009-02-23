@@ -122,6 +122,14 @@ This fork aims now to add more features like variable chunks and also
 integrate some of the features developed by H. Waara and S. Cranford in
 the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 
+Releases
+--------
+
+0.2
+    * Translatable
+    * ``flatblocks.views.edit`` view for editing flatblocks
+0.1
+    Initial release
 
 .. _`original fork`: http://github.com/howiworkdaily/django-flatblock/
 .. _`django-chunks`: http://code.google.com/p/django-chunks/

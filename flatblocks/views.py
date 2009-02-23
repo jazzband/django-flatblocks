@@ -26,8 +26,9 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
         # ...
 
         urlpatterns('flatblocks.views',
-            url('flatblocks/(?P<pk>\d+)/edit/$', 'edit', kwargs={'permission_check': my_perm_check}),
-            )
+            url('flatblocks/(?P<pk>\d+)/edit/$', 'edit',
+                kwargs={'permission_check': my_perm_check}),
+        )
 
     The contract here is pretty simple: If the function returns False, the
     view will return HttpResponseForbidden. Otherwise it will pass.  So if you
