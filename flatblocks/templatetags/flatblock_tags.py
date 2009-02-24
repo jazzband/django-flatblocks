@@ -139,7 +139,6 @@ class FlatBlockNode(template.Node):
             new_ctx = template.Context({})
             new_ctx.update(context)
         try:
-            print "Caching for %d" % (self.cache_time,)
             cache_key = CACHE_PREFIX + real_slug
             c = cache.get(cache_key)
             if c is None:
