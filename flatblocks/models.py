@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.core.cache import cache
 
 class FlatBlock(models.Model):
     """
@@ -17,4 +18,8 @@ class FlatBlock(models.Model):
 
     def __unicode__(self):
         return u"%s" % (self.slug,)
-
+    
+    def save(self):
+        super(FlatBlock, self).save()
+        # Now also invalidate the cache used in the templatetag
+        cache.delete('flatblocks_%s' % (self.slug, ))
