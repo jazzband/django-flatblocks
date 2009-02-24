@@ -38,6 +38,17 @@ of seconds, the that block should be cached::
     
     {% flatblock "page.info" 3600 %}
 
+Additionally you can also specify which template should be used to render the
+flatblock::
+    
+    {% flatblock "page.info" using "my_template.html" %}
+    # ...
+    {% flatblock "page.about" 3600 using "my_template.html" %}
+
+As with the slug of the flatblock also with the template name you have the
+choice of using the literal name of the template or pass it to the templatetag
+as a variable.
+
 edit-view
 ---------
 
@@ -125,6 +136,9 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.3dev
+    * As last argument of the template tag you can now also specify a template
+      name.
 0.2
     * Translatable
     * ``flatblocks.views.edit`` view for editing flatblocks
