@@ -10,10 +10,10 @@ class FlatBlock(models.Model):
     """
     slug = models.CharField(max_length=255, unique=True, 
                 verbose_name=_('Slug'),
-                help_text=_(_("A unique name used for reference in the templates")))
+                help_text=_("A unique name used for reference in the templates"))
     header = models.CharField(blank=True, null=True, max_length=255,
                 verbose_name=_('Header'),
-                help_text=_(_("An optional header for this content")))
+                help_text=_("An optional header for this content"))
     content = models.TextField(verbose_name=_('Content'), blank=True, null=True)
 
     def __unicode__(self):
@@ -23,3 +23,7 @@ class FlatBlock(models.Model):
         super(FlatBlock, self).save()
         # Now also invalidate the cache used in the templatetag
         cache.delete('flatblocks_%s' % (self.slug, ))
+
+    class Meta:
+        verbose_name = _('Flat block')
+        verbose_name_plural = _('Flat blocks')
