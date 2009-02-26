@@ -40,6 +40,7 @@ within that template.
 """
 
 from django import template
+from django.template import loader
 from django.db import models
 from django.core.cache import cache
 
@@ -145,7 +146,7 @@ class FlatBlockNode(template.Node):
                 c = FlatBlock.objects.get(slug=real_slug)
                 cache.set(cache_key, c, int(self.cache_time))
             if self.with_template:
-                tmpl = template.loader.get_template(real_template)
+                tmpl = loader.get_template(real_template)
                 new_ctx.update({'flatblock':c})
                 return tmpl.render(new_ctx)
             else:
