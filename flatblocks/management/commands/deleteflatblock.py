@@ -11,5 +11,8 @@ class Command(BaseCommand):
             raise CommandError, "This command requires the slug of the " \
                                 "flatblock as its first argument"
         slug = args[0]
-        FlatBlock.objects.get(slug=slug).delete()
+        try:
+            FlatBlock.objects.get(slug=slug).delete()
+        except FlatBlock.DoesNotExist, e:
+            raise CommandError, "The requested flatblock doesn't exist"
 

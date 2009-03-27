@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand, CommandError
+from django.db import IntegrityError
 
 from flatblocks.models import FlatBlock
 
@@ -13,4 +14,7 @@ class Command(BaseCommand):
         slug = args[0]
         block = FlatBlock(header="[%s]"%slug, content="Empty flatblock",
                 slug=slug)
-        block.save()
+        try:
+            block.save()
+        except IntegrityError, e:
+            raise CommandError, "A flatblock with this name already exists"
