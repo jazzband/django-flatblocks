@@ -137,6 +137,7 @@ Releases
 --------
 
 0.3dev
+    * createflatblock and deleteflatblock commands
     * As last argument of the template tag you can now also specify a template
       name.
 0.2
