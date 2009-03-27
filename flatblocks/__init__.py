@@ -1,4 +1,4 @@
-VERSION = (0, 2, 0, 'final')
+VERSION = (0, 3, 0, 'final')
 
 def get_version():
     v = "%d.%d.%d" % VERSION[:3]

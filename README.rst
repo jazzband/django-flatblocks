@@ -136,8 +136,9 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
-0.3dev
+0.3
     * createflatblock and deleteflatblock commands
+    * On saving a flatblock its cache will be cleared
     * As last argument of the template tag you can now also specify a template
       name.
 0.2
