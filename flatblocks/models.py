@@ -22,7 +22,7 @@ class FlatBlock(models.Model):
     def save(self):
         super(FlatBlock, self).save()
         # Now also invalidate the cache used in the templatetag
-        cache.delete('flatblocks_%s' % (self.slug, ))
+        cache.delete('flatblock_%s' % (self.slug, ))
 
     class Meta:
         verbose_name = _('Flat block')
