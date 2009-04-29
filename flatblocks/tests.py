@@ -2,9 +2,11 @@ import unittest
 
 from django import template
 from django.test import TestCase
+from django.core.cache import cache
 from django.contrib.auth.models import User
 
 from flatblocks import models
+from flatblocks.templatetags.flatblock_tags import CACHE_PREFIX
 
 class BasicTests(TestCase):
     urls = 'flatblocks.urls'
@@ -22,6 +24,19 @@ class BasicTests(TestCase):
         self.client.login(username='admin', password='adminpwd')
         self.assertEquals(self.client.get('/edit/1/').template.name, 'flatblocks/edit.html')
 
+    def testCacheReset(self):
+        """
+        Tests if FlatBlock.save() resets the cache.
+        """
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" 60 %}')
+        tpl.render({})
+        name = '%sblock' % CACHE_PREFIX
+        self.assertNotEquals(None, cache.get(name))
+        block = models.FlatBlock.objects.get(slug='block')
+        block.header = 'UPDATED'
+        block.save()
+        self.assertEquals(None, cache.get(name))
+        
     def tearDown(self):
         self.testblock.delete()
 
