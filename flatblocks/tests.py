@@ -1,9 +1,29 @@
 import unittest
 
 from django import template
+from django.test import TestCase
+from django.contrib.auth.models import User
 
 from flatblocks import models
 
+class BasicTests(TestCase):
+    urls = 'flatblocks.urls'
+
+    def setUp(self):
+        self.testblock = models.FlatBlock()
+        self.testblock.slug = 'block'
+        self.testblock.header = 'HEADER'
+        self.testblock.content = 'CONTENT'
+        self.testblock.save()
+        self.admin = User.objects.create_superuser('admin', 'admin@localhost', 'adminpwd')
+    
+    def testURLConf(self):
+        self.assertEquals(self.client.get('/edit/1/').template.name, 'admin/login.html')
+        self.client.login(username='admin', password='adminpwd')
+        self.assertEquals(self.client.get('/edit/1/').template.name, 'flatblocks/edit.html')
+
+    def tearDown(self):
+        self.testblock.delete()
 
 class TagTests(unittest.TestCase):
     def setUp(self):
@@ -39,9 +59,7 @@ class TagTests(unittest.TestCase):
 
     def testUsingMissingTemplate(self):
         tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" using "missing_template.html" %}')
-        # Actually we should be listening to a TemplateDoesNotExist exception
-        # but Django masks those.
-        exception = template.TemplateSyntaxError
+        exception = template.TemplateDoesNotExist
         self.assertRaises(exception, tpl.render, {})
 
     def testSyntax(self):
