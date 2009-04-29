@@ -6,3 +6,10 @@ Extended by
     * Peter Baumgardner <http://lincolnloop.com/blog>
     * Kevin Fricovsky <http://blog.howiworkdaily.com/>
     * Horst Gutmann <http://zerokspot.com/>
+
+Contributions by
+
+    * Michael Greene <http://michaelgreene.org/>
+    * Stephan Jaekel <http://www.sjaekel.com/>
+    * James O'Donnell <http://squarefactor.com/words/>
+    
