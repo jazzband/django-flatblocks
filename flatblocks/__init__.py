@@ -1,4 +1,4 @@
-VERSION = (0, 3, 0, 'final')
+VERSION = (0, 3, 1, 'final')
 CACHE_PREFIX = 'flatblock_'
 
 def get_version():

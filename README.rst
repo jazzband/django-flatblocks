@@ -136,6 +136,11 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.3.1
+    * Fixes a bug with FlatBlock.save() failing to reset the cache
+    * Buildout integration for easier testing
+    * Example urls.py and flatblocks/edit.html-template
+
 0.3
     * createflatblock and deleteflatblock commands
     * On saving a flatblock its cache will be cleared
