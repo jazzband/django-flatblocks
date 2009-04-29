@@ -5,8 +5,8 @@ from django.test import TestCase
 from django.core.cache import cache
 from django.contrib.auth.models import User
 
-from flatblocks import models
-from flatblocks.templatetags.flatblock_tags import CACHE_PREFIX
+from flatblocks import models, CACHE_PREFIX
+
 
 class BasicTests(TestCase):
     urls = 'flatblocks.urls'

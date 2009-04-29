@@ -44,10 +44,12 @@ from django.template import loader
 from django.db import models
 from django.core.cache import cache
 
+from flatblocks import CACHE_PREFIX
+
+
 register = template.Library()
 
 FlatBlock = models.get_model('flatblocks', 'flatblock')
-CACHE_PREFIX = "flatblock_"
 
 class BasicFlatBlockWrapper(object):
     def prepare(self, parser, token):
