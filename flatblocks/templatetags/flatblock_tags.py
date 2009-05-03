@@ -44,7 +44,7 @@ from django.template import loader
 from django.db import models
 from django.core.cache import cache
 
-from flatblocks import CACHE_PREFIX
+from flatblocks.settings import CACHE_PREFIX
 
 
 register = template.Library()

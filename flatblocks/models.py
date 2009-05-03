@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.cache import cache
 
-from flatblocks import CACHE_PREFIX
+from flatblocks.settings import CACHE_PREFIX
 
 
 class FlatBlock(models.Model):
