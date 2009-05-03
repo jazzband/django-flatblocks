@@ -63,8 +63,8 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
         origin = origin == request.get_full_path() and request.session.get(session_key, '/') or origin
         form = modelform_class(instance=flatblock)
         request.session[session_key] = origin
-    return render_to_response(template_name, RequestContext(request, {
+    return render_to_response(template_name, {
         'form': form,
         'origin': origin,
         'flatblock': flatblock,
-        }))
+        }, context_instance=RequestContext(request))
