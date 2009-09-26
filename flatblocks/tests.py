@@ -4,6 +4,7 @@ from django import template
 from django.test import TestCase
 from django.core.cache import cache
 from django.contrib.auth.models import User
+from django import db
 
 from flatblocks import models
 from flatblocks.settings import CACHE_PREFIX
@@ -38,6 +39,13 @@ class BasicTests(TestCase):
         block.save()
         self.assertEquals(None, cache.get(name))
         
+    def testSaveKwargs(self):
+        block = models.FlatBlock()
+        block.slug = 'missing'
+        self.assertRaises(ValueError, block.save, force_update=True)
+        block = models.FlatBlock.objects.get(slug='block')
+        self.assertRaises(db.IntegrityError, block.save, force_insert=True)
+
     def tearDown(self):
         self.testblock.delete()
 

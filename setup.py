@@ -5,11 +5,9 @@ except:
     use_setuptools()
     from setuptools import setup, find_packages
 
-from flatblocks import get_version
-
 setup(
     name = 'django-flatblocks',
-    version = get_version(),
+    version = '0.3.3',
     description = 'django-flatblocks acts like django.contrib.flatpages but '
                   'for parts of a page; like an editable help box you want '
                   'show alongside the main content.',

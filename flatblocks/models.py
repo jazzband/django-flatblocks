@@ -22,8 +22,8 @@ class FlatBlock(models.Model):
     def __unicode__(self):
         return u"%s" % (self.slug,)
     
-    def save(self):
-        super(FlatBlock, self).save()
+    def save(self, *args, **kwargs):
+        super(FlatBlock, self).save(*args, **kwargs)
         # Now also invalidate the cache used in the templatetag
         cache.delete('%s%s' % (CACHE_PREFIX, self.slug, ))
 
