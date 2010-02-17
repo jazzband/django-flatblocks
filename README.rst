@@ -136,6 +136,12 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.3.4
+    * Norwegian translation by Eivind Uggedal
+
+0.3.3
+    * FlatBlock.save should also accept optional kwargs.
+
 0.3.2
     * All settings are now in the flatblocks.settings module
 
