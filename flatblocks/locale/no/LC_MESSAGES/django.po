@@ -1,0 +1,29 @@
+msgid ""
+msgstr ""
+"Last-Translator: Eivind Uggedal <eivind@uggedal.com>\n"
+"Language-Team: Norsk <no@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+
+msgid "You are not allowed to edit this flatblock"
+msgstr "Du har ikke lov til endre denne flatblokken"
+
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Header"
+msgstr "Overskrift"
+
+msgid "Content"
+msgstr "Innhold"
+
+msgid "A unique name used for reference in the templates"
+msgstr "Et unikt navn som kan refereres til fra en mal"
+
+msgid "An optional header for this content"
+msgstr "En overskrift for dette innholdet (ikke påkrevd)"
