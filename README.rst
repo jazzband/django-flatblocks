@@ -136,6 +136,9 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.3.5
+    * Russian translation by Mikhail Korobov
+
 0.3.4
     * Norwegian translation by Eivind Uggedal
 

@@ -7,7 +7,7 @@ except:
 
 setup(
     name = 'django-flatblocks',
-    version = '0.3.4',
+    version = '0.3.5',
     description = 'django-flatblocks acts like django.contrib.flatpages but '
                   'for parts of a page; like an editable help box you want '
                   'show alongside the main content.',
