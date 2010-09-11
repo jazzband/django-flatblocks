@@ -7,34 +7,34 @@ It accepts 2 parameter:
 
     slug
         The slug/key of the text (for example 'contact_help'). There are two
-        ways you can pass the slug to the templatetag: (1) by its name or 
+        ways you can pass the slug to the templatetag: (1) by its name or
         (2) as a variable.
-        
-        If you want to pass it by name, you have to use quotes on it. 
+
+        If you want to pass it by name, you have to use quotes on it.
         Otherwise just use the variable name.
 
     cache_time
         The number of seconds that text should get cached after it has been
         fetched from the database.
-        
+
         This field is option and defaults to no caching.
-        
+
 Example::
-    
+
     {% load flatblock_tags %}
-    
+
     ...
-    
+
     {% flatblock 'contact_help' %}
     {% flatblock name_in_variable %}
-    
-The 'flatblock' template tag acts like an inclusiontag and operates on the 
+
+The 'flatblock' template tag acts like an inclusiontag and operates on the
 ``flatblock/flatblock.html`` template file, which gets (besides the global
-context) also the ``flatblock`` variable passed. 
+context) also the ``flatblock`` variable passed.
 
 Compared to the original implementation this includes not only the block's
-content but the whole object inclusing title, slug and id. This way you 
-can easily for example offer administrative operations (like editing) 
+content but the whole object inclusing title, slug and id. This way you
+can easily for example offer administrative operations (like editing)
 within that template.
 
 """
@@ -55,7 +55,7 @@ class BasicFlatBlockWrapper(object):
     def prepare(self, parser, token):
         """
         The parser checks for following tag-configurations::
-            
+
             {% flatblock {block} %}
             {% flatblock {block} {timeout} %}
             {% flatblock {block} using {tpl_name} %}
@@ -74,7 +74,7 @@ class BasicFlatBlockWrapper(object):
             pass
         elif num_args == 1:
             # block and timeout
-            self.cache_time = args[0] 
+            self.cache_time = args[0]
             pass
         elif num_args == 2:
             # block, "using", tpl_name
@@ -97,11 +97,11 @@ class BasicFlatBlockWrapper(object):
             else:
                 self.tpl_name = self.tpl_name[1:-1]
         self.cache_time = int(self.cache_time)
-    
+
     def __call__(self, parser, token):
         self.prepare(parser, token)
-        return FlatBlockNode(self.slug, self.is_variable, self.cache_time, 
-                template_name=self.tpl_name, 
+        return FlatBlockNode(self.slug, self.is_variable, self.cache_time,
+                template_name=self.tpl_name,
                 tpl_is_variable=self.tpl_is_variable)
 
 class PlainFlatBlockWrapper(BasicFlatBlockWrapper):
@@ -111,7 +111,7 @@ class PlainFlatBlockWrapper(BasicFlatBlockWrapper):
 
 do_get_flatblock = BasicFlatBlockWrapper()
 do_plain_flatblock = PlainFlatBlockWrapper()
-    
+
 class FlatBlockNode(template.Node):
     def __init__(self, slug, is_variable, cache_time=0, with_template=True,
             template_name=None, tpl_is_variable=False):
@@ -126,7 +126,7 @@ class FlatBlockNode(template.Node):
         self.is_variable = is_variable
         self.cache_time = cache_time
         self.with_template = with_template
-    
+
     def render(self, context):
         if self.is_variable:
             real_slug = template.Variable(self.slug).resolve(context)
@@ -143,16 +143,16 @@ class FlatBlockNode(template.Node):
             new_ctx.update(context)
         try:
             cache_key = CACHE_PREFIX + real_slug
-            c = cache.get(cache_key)
-            if c is None:
-                c = FlatBlock.objects.get(slug=real_slug)
-                cache.set(cache_key, c, int(self.cache_time))
+            flatblock = cache.get(cache_key)
+            if flatblock is None:
+                flatblock = FlatBlock.objects.get(slug=real_slug)
+                cache.set(cache_key, flatblock, int(self.cache_time))
             if self.with_template:
                 tmpl = loader.get_template(real_template)
-                new_ctx.update({'flatblock':c})
+                new_ctx.update({'flatblock':flatblock})
                 return tmpl.render(new_ctx)
             else:
-                return c.content
+                return flatblock.content
         except FlatBlock.DoesNotExist:
             return ''
 
