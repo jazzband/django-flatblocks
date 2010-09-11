@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.contrib.auth.models import User
 from django import db
 
-from flatblocks import models
+from flatblocks.models import FlatBlock
 from flatblocks.settings import CACHE_PREFIX
 
 
@@ -14,11 +14,11 @@ class BasicTests(TestCase):
     urls = 'flatblocks.urls'
 
     def setUp(self):
-        self.testblock = models.FlatBlock()
-        self.testblock.slug = 'block'
-        self.testblock.header = 'HEADER'
-        self.testblock.content = 'CONTENT'
-        self.testblock.save()
+        self.testblock = FlatBlock.objects.create(
+             slug='block',
+             header='HEADER',
+             content='CONTENT'
+        )
         self.admin = User.objects.create_superuser('admin', 'admin@localhost', 'adminpwd')
 
     def testURLConf(self):
@@ -34,38 +34,31 @@ class BasicTests(TestCase):
         tpl.render(template.Context({}))
         name = '%sblock' % CACHE_PREFIX
         self.assertNotEquals(None, cache.get(name))
-        block = models.FlatBlock.objects.get(slug='block')
+        block = FlatBlock.objects.get(slug='block')
         block.header = 'UPDATED'
         block.save()
         self.assertEquals(None, cache.get(name))
 
     def testSaveKwargs(self):
-        block = models.FlatBlock()
-        block.slug = 'missing'
+        block = FlatBlock(slug='missing')
+#        block.slug = 'missing'
         self.assertRaises(ValueError, block.save, force_update=True)
-        block = models.FlatBlock.objects.get(slug='block')
+        block = FlatBlock.objects.get(slug='block')
         self.assertRaises(db.IntegrityError, block.save, force_insert=True)
 
-    def tearDown(self):
-        self.testblock.delete()
 
-class TagTests(unittest.TestCase):
+class TagTests(TestCase):
     def setUp(self):
-        self.testblock = models.FlatBlock()
-        self.testblock.slug = 'block'
-        self.testblock.header = 'HEADER'
-        self.testblock.content = 'CONTENT'
-        self.testblock.save()
+        self.testblock = FlatBlock.objects.create(
+             slug='block',
+             header='HEADER',
+             content='CONTENT'
+        )
 
     def testLoadingTaglib(self):
         """Tests if the taglib defined in this app can be loaded"""
         tpl = template.Template('{% load flatblock_tags %}')
         tpl.render(template.Context({}))
-
-    def testMissingBlock(self):
-        """Tests if a missing block will simply return an empty string"""
-        tpl = template.Template('{% load flatblock_tags %}{% flatblock "missing_block" %}')
-        self.assertEqual('', tpl.render(template.Context({})).strip())
 
     def testExistingPlain(self):
         tpl = template.Template('{% load flatblock_tags %}{% plain_flatblock "block" %}')
@@ -101,10 +94,30 @@ class TagTests(unittest.TestCase):
         tpl = template.Template('{% load flatblock_tags %}{% flatblock blockvar %}')
         tpl.render(template.Context({'blockvar': 'block'}))
 
-    def tearDown(self):
-        self.testblock.delete()
+
+class AutoCreationTest(TestCase):
+    """ Test case for block autcreation """
+
+    def testMissingStaticBlock(self):
+        """Tests if a missing block with hardcoded name will be auto-created"""
+        expected = """<div class="flatblock block-foo">
+
+    <div class="content">foo</div>
+</div>"""
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "foo" %}')
+        self.assertEqual(expected, tpl.render(template.Context({})).strip())
+        self.assertEqual(FlatBlock.objects.count(), 1)
+        self.assertEqual(expected, tpl.render(template.Context({})).strip())
+        self.assertEqual(FlatBlock.objects.count(), 1)
+
+    def testMissingVariableBlock(self):
+        """Tests if a missing block with variable name will simply return an empty string"""
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock name %}')
+        self.assertEqual('', tpl.render(template.Context({'name': 'foo'})).strip())
+
 
 class ModelTestCase(unittest.TestCase):
     """A selection of testcases regarding the models themselves"""
-    pass
+
+
 

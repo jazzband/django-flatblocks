@@ -145,8 +145,18 @@ class FlatBlockNode(template.Node):
             cache_key = CACHE_PREFIX + real_slug
             flatblock = cache.get(cache_key)
             if flatblock is None:
-                flatblock = FlatBlock.objects.get(slug=real_slug)
+
+                # if flatblock's slug is hard-coded in template then it is
+                # safe and convenient to auto-create block if it doesn't exist.
+                if self.is_variable:
+                    flatblock = FlatBlock.objects.get(slug=real_slug)
+                else:
+                    flatblock, _ = FlatBlock.objects.get_or_create(
+                                      slug=real_slug,
+                                      defaults = {'content': real_slug}
+                                   )
                 cache.set(cache_key, flatblock, int(self.cache_time))
+
             if self.with_template:
                 tmpl = loader.get_template(real_template)
                 new_ctx.update({'flatblock':flatblock})
