@@ -27,7 +27,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    packages = find_packages(exclude='ez_setup'),
+    packages = find_packages(exclude=['ez_setup', 'test_project']),
     include_package_data = True,
     zip_safe = False,
 )
