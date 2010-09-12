@@ -1,5 +1,3 @@
-import unittest
-
 from django import template
 from django.test import TestCase
 from django.core.cache import cache
@@ -22,9 +20,14 @@ class BasicTests(TestCase):
         self.admin = User.objects.create_superuser('admin', 'admin@localhost', 'adminpwd')
 
     def testURLConf(self):
-        self.assertEquals(self.client.get('/edit/1/').template[0].name, 'admin/login.html')
+        # We have to support two different APIs here (1.1 and 1.2)
+        def get_tmpl(resp):
+            if isinstance(resp.template, list):
+                return resp.template[0]
+            return resp.template
+        self.assertEquals(get_tmpl(self.client.get('/edit/1/')).name, 'admin/login.html')
         self.client.login(username='admin', password='adminpwd')
-        self.assertEquals(self.client.get('/edit/1/').template.name, 'flatblocks/edit.html')
+        self.assertEquals(get_tmpl(self.client.get('/edit/1/')).name, 'flatblocks/edit.html')
 
     def testCacheReset(self):
         """
@@ -114,10 +117,5 @@ class AutoCreationTest(TestCase):
         """Tests if a missing block with variable name will simply return an empty string"""
         tpl = template.Template('{% load flatblock_tags %}{% flatblock name %}')
         self.assertEqual('', tpl.render(template.Context({'name': 'foo'})).strip())
-
-
-class ModelTestCase(unittest.TestCase):
-    """A selection of testcases regarding the models themselves"""
-
 
 

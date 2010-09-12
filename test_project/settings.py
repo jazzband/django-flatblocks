@@ -2,7 +2,7 @@ import os
 import sys
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(PROJECT_ROOT))
+#sys.path.insert(0, os.path.dirname(PROJECT_ROOT))
 
 DEBUG=True
 TEMPLATE_DEBUG=True
@@ -19,4 +19,4 @@ LANGUAGE_CODE="no"
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
 )
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'test_project.urls'
