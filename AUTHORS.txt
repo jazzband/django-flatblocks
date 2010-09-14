@@ -13,4 +13,5 @@ Contributions by
     * Stephan Jaekel <http://www.sjaekel.com/>
     * James O'Donnell <http://squarefactor.com/words/>
     * Mikhail Korobov <http://github.com/kmike>
+    * Henrik Heimbuerger <http://github.com/hheimbuerger>
 
