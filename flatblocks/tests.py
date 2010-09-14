@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django import db
 
 from flatblocks.models import FlatBlock
-from flatblocks.settings import CACHE_PREFIX
+from flatblocks import settings
 
 
 class BasicTests(TestCase):
@@ -35,7 +35,7 @@ class BasicTests(TestCase):
         """
         tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" 60 %}')
         tpl.render(template.Context({}))
-        name = '%sblock' % CACHE_PREFIX
+        name = '%sblock' % settings.CACHE_PREFIX
         self.assertNotEquals(None, cache.get(name))
         block = FlatBlock.objects.get(slug='block')
         block.header = 'UPDATED'
@@ -107,13 +107,23 @@ class AutoCreationTest(TestCase):
 
     <div class="content">foo</div>
 </div>"""
+        settings.AUTOCREATE_STATIC_BLOCKS = True
         tpl = template.Template('{% load flatblock_tags %}{% flatblock "foo" %}')
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
         self.assertEqual(FlatBlock.objects.count(), 1)
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
         self.assertEqual(FlatBlock.objects.count(), 1)
 
+    def testNotAutocreatedMissingStaticBlock(self):
+        """Tests if a missing block with hardcoded name won't be auto-created if feature is disabled"""
+        expected = u""
+        settings.AUTOCREATE_STATIC_BLOCKS = False
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" %}')
+        self.assertEqual(expected, tpl.render(template.Context({})).strip())
+        self.assertEqual(FlatBlock.objects.filter(slug='block').count(), 0)
+
     def testMissingVariableBlock(self):
+        settings.AUTOCREATE_STATIC_BLOCKS = True
         """Tests if a missing block with variable name will simply return an empty string"""
         tpl = template.Template('{% load flatblock_tags %}{% flatblock name %}')
         self.assertEqual('', tpl.render(template.Context({'name': 'foo'})).strip())

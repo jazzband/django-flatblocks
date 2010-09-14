@@ -12,4 +12,5 @@ Contributions by
     * Michael Greene <http://michaelgreene.org/>
     * Stephan Jaekel <http://www.sjaekel.com/>
     * James O'Donnell <http://squarefactor.com/words/>
-    
+    * Mikhail Korobov <http://github.com/kmike>
+

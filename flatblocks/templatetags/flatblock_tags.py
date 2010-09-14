@@ -44,7 +44,7 @@ from django.template import loader
 from django.db import models
 from django.core.cache import cache
 
-from flatblocks.settings import CACHE_PREFIX
+from flatblocks import settings
 
 
 register = template.Library()
@@ -142,13 +142,15 @@ class FlatBlockNode(template.Node):
             new_ctx = template.Context({})
             new_ctx.update(context)
         try:
-            cache_key = CACHE_PREFIX + real_slug
+            cache_key = settings.CACHE_PREFIX + real_slug
             flatblock = cache.get(cache_key)
             if flatblock is None:
 
                 # if flatblock's slug is hard-coded in template then it is
                 # safe and convenient to auto-create block if it doesn't exist.
-                if self.is_variable:
+                # This behaviour can be configured using the
+                # FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS setting
+                if self.is_variable or not settings.AUTOCREATE_STATIC_BLOCKS:
                     flatblock = FlatBlock.objects.get(slug=real_slug)
                 else:
                     flatblock, _ = FlatBlock.objects.get_or_create(

@@ -136,6 +136,10 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.4 (unreleased)
+    * FlatBlock autocreation by Mikhail Korobov (can be enabled/disabled
+      with FLATBLOCKS\_AUTOCREATE\_STATIC\_BLOCKS setting)
+
 0.3.5
     * Russian translation by Mikhail Korobov
 
