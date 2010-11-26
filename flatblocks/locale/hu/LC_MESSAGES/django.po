@@ -1,0 +1,50 @@
+# Hungarian translations for django-flatblocks.
+# This file is distributed under the same license as the django-flatblocks project.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: django-flatblocks\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-26 10:27+0100\n"
+"PO-Revision-Date: 2010-11-26 10:49+0100\n"
+"Last-Translator: Török Gábor <gabor@20y.hu>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.5\n"
+
+#: models.py:15
+msgid "Slug"
+msgstr "Név"
+
+#: models.py:16
+msgid "A unique name used for reference in the templates"
+msgstr "Egyedi név, amivel a sablonokban tud majd a dobozra hivatkozni"
+
+#: models.py:18
+msgid "Header"
+msgstr "Cím"
+
+#: models.py:19
+msgid "An optional header for this content"
+msgstr "Opcionális cím a tartalomhoz"
+
+#: models.py:20
+msgid "Content"
+msgstr "Tartalom"
+
+#: models.py:31
+msgid "Flat block"
+msgstr "Egyszerű doboz"
+
+#: models.py:32
+msgid "Flat blocks"
+msgstr "Egyszerű dobozok"
+
+#: views.py:44
+msgid "You are not allowed to edit this flatblock"
+msgstr "Nincs joga a doboz módosításához"
+
