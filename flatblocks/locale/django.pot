@@ -1,0 +1,51 @@
+# Translations template for PROJECT.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-11-26 10:27+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.5\n"
+
+#: models.py:15
+msgid "Slug"
+msgstr ""
+
+#: models.py:16
+msgid "A unique name used for reference in the templates"
+msgstr ""
+
+#: models.py:18
+msgid "Header"
+msgstr ""
+
+#: models.py:19
+msgid "An optional header for this content"
+msgstr ""
+
+#: models.py:20
+msgid "Content"
+msgstr ""
+
+#: models.py:31
+msgid "Flat block"
+msgstr ""
+
+#: models.py:32
+msgid "Flat blocks"
+msgstr ""
+
+#: views.py:44
+msgid "You are not allowed to edit this flatblock"
+msgstr ""
+
