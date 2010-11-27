@@ -136,6 +136,10 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.5
+    * Hungarian translation by Török Gábor
+    * Method added to demo edit form (#5) by Bill Evans
+
 0.4
     * FlatBlock autocreation by Mikhail Korobov (can be enabled/disabled
       with FLATBLOCKS\_AUTOCREATE\_STATIC\_BLOCKS setting)
