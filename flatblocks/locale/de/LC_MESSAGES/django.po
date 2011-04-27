@@ -25,3 +25,9 @@ msgstr "Ein eindeutiger Name, über den dieser Block in Templates referenziert w
 msgid "An optional header for this content"
 msgstr "Eine optionale Überschrift für diesen Block"
 
+msgid "Flat block"
+msgstr "Flatblock"
+
+msgid "Flat blocks"
+msgstr "Flatblocks"
+
