@@ -8,14 +8,20 @@ DEBUG=True
 TEMPLATE_DEBUG=True
 DATABASE_ENGINE = 'sqlite3'
 DATABASE_NAME = '/tmp/flatblocks.db'
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'flatblocks',
-)
-LANGUAGE_CODE="no"
+]
+try:
+    import south
+    INSTALLED_APPS.append('south')
+except ImportError, _:
+    pass
+
+LANGUAGE_CODE="en"
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
 )
