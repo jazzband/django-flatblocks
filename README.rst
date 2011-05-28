@@ -136,6 +136,11 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.5.1
+    * Removed rendering of the content attribute from the admin list by Michael Fladischer
+    * PyBabel compatibility by Michael Fladischer
+    * Fixed caching issue with memcache backend
+
 0.5
     * Hungarian translation by Török Gábor
     * Method added to demo edit form (#5) by Bill Evans
