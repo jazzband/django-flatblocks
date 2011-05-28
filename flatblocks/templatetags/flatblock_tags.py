@@ -17,7 +17,9 @@ It accepts 2 parameter:
         The number of seconds that text should get cached after it has been
         fetched from the database.
 
-        This field is option and defaults to no caching.
+        This field is optional and defaults to no caching (0).
+
+        To use Django's default caching length use None.
 
 Example::
 
@@ -46,8 +48,11 @@ from django.core.cache import cache
 
 from flatblocks import settings
 
+import logging
+
 
 register = template.Library()
+logger = logging.getLogger(__name__)
 
 FlatBlock = models.get_model('flatblocks', 'flatblock')
 
@@ -96,7 +101,8 @@ class BasicFlatBlockWrapper(object):
                 self.tpl_is_variable = True
             else:
                 self.tpl_name = self.tpl_name[1:-1]
-        self.cache_time = int(self.cache_time)
+        if self.cache_time is not None and self.cache_time != 'None':
+            self.cache_time = int(self.cache_time)
 
     def __call__(self, parser, token):
         self.prepare(parser, token)
@@ -142,8 +148,10 @@ class FlatBlockNode(template.Node):
             new_ctx = template.Context({})
             new_ctx.update(context)
         try:
-            cache_key = settings.CACHE_PREFIX + real_slug
-            flatblock = cache.get(cache_key)
+            flatblock = None
+            if self.cache_time != 0:
+                cache_key = settings.CACHE_PREFIX + real_slug
+                flatblock = cache.get(cache_key)
             if flatblock is None:
 
                 # if flatblock's slug is hard-coded in template then it is
@@ -157,7 +165,17 @@ class FlatBlockNode(template.Node):
                                       slug=real_slug,
                                       defaults = {'content': real_slug}
                                    )
-                cache.set(cache_key, flatblock, int(self.cache_time))
+                if self.cache_time != 0:
+                    if self.cache_time is None or self.cache_time == 'None':
+                        logger.debug("Caching %s for the cache's default timeout"
+                                % (real_slug,))
+                        cache.set(cache_key, flatblock)
+                    else:
+                        logger.debug("Caching %s for %s seconds" % (real_slug,
+                            str(self.cache_time)))
+                        cache.set(cache_key, flatblock, int(self.cache_time))
+                else:
+                    logger.debug("Don't cache %s" % (real_slug,))
 
             if self.with_template:
                 tmpl = loader.get_template(real_template)
