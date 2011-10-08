@@ -1,23 +1,48 @@
 from django import template
 from django.test import TestCase
+from django.conf import settings as global_settings
 from django.core.cache import cache
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django import db
 
 from flatblocks.models import FlatBlock
 from flatblocks import settings
 
 
-class BasicTests(TestCase):
+class SiteTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.site_1 = Site(name='site1', domain='site1.com')
+        cls.site_1.save()
+        cls.site_2 = Site(name='site2', domain='site2.com')
+        cls.site_2.save()
+        global_settings.SITE_ID = cls.site_1.pk
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.site_1.delete()
+        cls.site_2.delete()
+
+    def create_block_for_site1(self, **kwargs):
+        return self.__class__.site_1.flatblock_set.create(**kwargs)
+
+    def create_block_for_site2(self, **kwargs):
+        return self.__class__.site_2.flatblock_set.create(**kwargs)
+
+class BasicTests(SiteTestCase):
     urls = 'flatblocks.urls'
 
     def setUp(self):
-        self.testblock = FlatBlock.objects.create(
+        self.testblock = self.create_block_for_site1(
              slug='block',
              header='HEADER',
-             content='CONTENT'
+             content='CONTENT',
         )
         self.admin = User.objects.create_superuser('admin', 'admin@localhost', 'adminpwd')
+    
+    def tearDown(self):
+        self.testblock.delete()
 
     def testURLConf(self):
         # We have to support two different APIs here (1.1 and 1.2)
@@ -49,14 +74,26 @@ class BasicTests(TestCase):
         block = FlatBlock.objects.get(slug='block')
         self.assertRaises(db.IntegrityError, block.save, force_insert=True)
 
+    def testSiteUniqueness(self):
+        """
+        Make sure that there can only be one flatblock with a slug for a site.
+        """
+        self.create_block_for_site1(slug='unique1').full_clean()
+        self.create_block_for_site2(slug='unique1').full_clean()
+        with self.assertRaises(Exception) as cm:
+            self.create_block_for_site1(slug='unique1').full_clean()
 
-class TagTests(TestCase):
+
+class TagTests(SiteTestCase):
     def setUp(self):
-        self.testblock = FlatBlock.objects.create(
+        self.testblock = self.create_block_for_site1(
              slug='block',
              header='HEADER',
              content='CONTENT'
         )
+
+    def tearDown(self):
+        self.testblock.delete()
 
     def testLoadingTaglib(self):
         """Tests if the taglib defined in this app can be loaded"""

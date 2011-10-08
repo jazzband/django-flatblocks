@@ -37,7 +37,7 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
 
     If everything is alright with the permissions, simply return True.
     """
-    flatblock = get_object_or_404(FlatBlock, pk=pk)
+    flatblock = get_object_or_404(FlatBlock.site_objects.all(), pk=pk)
     if permission_check is not None:
         permcheck_result = permission_check(request, flatblock)
         if permcheck_result is False:

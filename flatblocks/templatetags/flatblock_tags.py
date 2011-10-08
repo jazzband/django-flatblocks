@@ -44,6 +44,7 @@ within that template.
 from django import template
 from django.template import loader
 from django.db import models
+from django.contrib.sites.models import Site
 from django.core.cache import cache
 
 from flatblocks import settings
@@ -159,12 +160,17 @@ class FlatBlockNode(template.Node):
                 # This behaviour can be configured using the
                 # FLATBLOCKS_AUTOCREATE_STATIC_BLOCKS setting
                 if self.is_variable or not settings.AUTOCREATE_STATIC_BLOCKS:
-                    flatblock = FlatBlock.objects.get(slug=real_slug)
+                    flatblock = FlatBlock.site_objects.get(slug=real_slug)
                 else:
-                    flatblock, _ = FlatBlock.objects.get_or_create(
+                    flatblock, created = FlatBlock.site_objects.get_or_create(
                                       slug=real_slug,
-                                      defaults = {'content': real_slug}
+                                      defaults = {
+                                          'content': real_slug,
+                                      }
                                    )
+                    if created:
+                        flatblock.sites.add(Site.objects.get_current())
+                        flatblock.save()
                 if self.cache_time != 0:
                     if self.cache_time is None or self.cache_time == 'None':
                         logger.debug("Caching %s for the cache's default timeout"
