@@ -1,0 +1,12 @@
+{% load flatblock_tags %}<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Test page for flatblock rendering</title>
+    </head>
+    <body>
+        {% flatblock 'test1' 0 %} <!-- No caching -->
+        {% flatblock 'test2' 10 %} <!-- 10s caching --> 
+        {% flatblock 'test3' None %} <!-- Default length caching -->
+    </body>
+</html>
