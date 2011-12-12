@@ -6,6 +6,11 @@ websites. Think about it like ``django.contrib.flatpages`` just not for a
 whole page but for only parts of it, like an information text describing what
 you can do on a site.
 
+Installation
+------------
+
+Add 'flatblocks' in your installed apps in your settings.py then run a 'python manage.py syncdb'.
+
 Usage
 ------------
 
