@@ -9,7 +9,10 @@ you can do on a site.
 Installation
 ------------
 
-Add 'flatblocks' in your installed apps in your settings.py then run a 'python manage.py syncdb'.
+Probably the easiest way to install this application is to first run `pip
+install django-flatblocks`.  Once this step is complete add "flatblocks" to
+your INSTALLED_APPS setting in your settings.py file and run `python manage.py
+syncdb` to update your database.
 
 Usage
 ------------
