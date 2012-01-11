@@ -17,6 +17,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'flatblocks',
+    'south'
 )
 LANGUAGE_CODE="en"
 TEMPLATE_DIRS = (

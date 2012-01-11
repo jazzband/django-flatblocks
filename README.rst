@@ -14,6 +14,27 @@ install django-flatblocks`.  Once this step is complete add "flatblocks" to
 your INSTALLED_APPS setting in your settings.py file and run `python manage.py
 syncdb` to update your database.
 
+
+Upgrading
+---------
+
+django-flatblocks uses `South`_ for handling data and schema migrations
+starting with version 0.6.0, so the South-typical update path applies here.
+
+If you're upgrading from a 0.5.x version or earlier you will have to migrate
+in 3 steps:
+
+1. Install south.
+
+2. Migrate your database to the first version of flatblocks using South::
+
+   ./manage.py migrate flatblocks 0001 --fake
+
+3. Then migrate your dataabase to the latest version of flatblocks' database
+   and data structure::
+
+   ./manage.py migrate flatblocks
+
 Usage
 ------------
 
@@ -144,6 +165,10 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.6.0 (incoming):
+    * South support
+    * Installation and upgrade instructions
+
 0.5.1
     * Removed rendering of the content attribute from the admin list by Michael Fladischer
     * PyBabel compatibility by Michael Fladischer
@@ -191,3 +216,4 @@ Releases
 .. _`django-chunks`: http://code.google.com/p/django-chunks/
 .. _`django-better-chunks`: http://bitbucket.org/hakanw/django-better-chunks/
 .. _`forked by Peter Baumgardner`: http://github.com/lincolnloop/django-flatblock/
+.. _`south`: http://south.aeracode.org/
