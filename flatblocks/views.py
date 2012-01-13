@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden,\
+                        HttpResponse
 from django.utils.translation import ugettext as _
 
 from flatblocks.models import FlatBlock
@@ -17,7 +18,7 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
     keyword-argument.
 
     The other entry point helps you check permissions: Pass a simple function
-    via the ``permission_check`` keyword-argument in order to check 
+    via the ``permission_check`` keyword-argument in order to check
     permissions on the flatblock-level::
         
         def my_perm_check(request, flatblock):
@@ -33,7 +34,7 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
     The contract here is pretty simple: If the function returns False, the
     view will return HttpResponseForbidden. Otherwise it will pass.  So if you
     want to do some fancy redirects if the permissions are wrong, return your
-    own HttpResponse-object/-subclass. 
+    own HttpResponse-object/-subclass.
 
     If everything is alright with the permissions, simply return True.
     """
@@ -47,7 +48,7 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
 
     session_key = 'flatblock.origin.%d' % (int(pk), )
     if request.method == 'POST':
-        origin = request.session.get(session_key, 
+        origin = request.session.get(session_key,
                 request.META.get('HTTP_REFERER', '/'))
         form = modelform_class(request.POST, instance=flatblock)
         if form.is_valid():
