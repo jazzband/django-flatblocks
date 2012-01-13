@@ -165,9 +165,12 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
-0.6.0 (incoming):
+0.6.0:
     * South support
     * Installation and upgrade instructions
+
+    Note: This is primarily a transitional release to get South in here and
+    open this project up for some database changes in the future.
 
 0.5.1
     * Removed rendering of the content attribute from the admin list by Michael Fladischer
