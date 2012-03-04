@@ -28,6 +28,11 @@ class FlatBlock(models.Model):
         # Now also invalidate the cache used in the templatetag
         cache.delete('%s%s' % (CACHE_PREFIX, self.slug, ))
 
+    def delete(self, *args, **kwargs):
+        cache_key = '%s%s' % (CACHE_PREFIX, self.slug,)
+        super(FlatBlock, self).delete(*args, **kwargs)
+        cache.delete(cache_key)
+
     class Meta:
         verbose_name = _('Flat block')
         verbose_name_plural = _('Flat blocks')

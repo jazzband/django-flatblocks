@@ -49,6 +49,20 @@ class BasicTests(TestCase):
         block = FlatBlock.objects.get(slug='block')
         self.assertRaises(db.IntegrityError, block.save, force_insert=True)
 
+    def testCacheRemoval(self):
+        """
+        If a block is deleted it should also be removed from the cache.
+        """
+        block = FlatBlock(slug="test", content="CONTENT")
+        block.save()
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "test" 100 %}')
+        # We fill the cache by rendering the block
+        tpl.render(template.Context({}))
+        cache_key = "%stest" % settings.CACHE_PREFIX
+        self.assertNotEquals(None, cache.get(cache_key))
+        block.delete()
+        self.assertEquals(None, cache.get(cache_key))
+
 
 class TagTests(TestCase):
     def setUp(self):
