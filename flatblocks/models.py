@@ -20,6 +20,11 @@ class FlatBlock(models.Model):
     content = models.TextField(verbose_name=_('Content'), blank=True,
                 null=True)
 
+    # Helper attributes used if content should be evaluated in order to
+    # represent the original content.
+    raw_content = None
+    raw_header = None
+
     def __unicode__(self):
         return u"%s" % (self.slug,)
 

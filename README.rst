@@ -78,6 +78,19 @@ As with the slug of the flatblock also with the template name you have the
 choice of using the literal name of the template or pass it to the templatetag
 as a variable.
 
+The content of a flatblock (as well as its header) can also be evaluated as a
+full-fledged Django template::
+    
+    {% flatblock "page.info" evaluated %}
+
+This also works with the other parameters like the cache timeout and the
+custom template::
+    
+
+    {% flatblock "page.info" evaluated using "my_template.html" %}
+    {% flatblock "page.about" 3600 evaluated using "my_template.html" %}
+
+
 edit-view
 ---------
 
@@ -164,6 +177,9 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 
 Releases
 --------
+
+0.7.0:
+    * Support for evaluated blocks offering access to context variables
 
 0.6.0:
     * South support

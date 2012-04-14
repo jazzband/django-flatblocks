@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django import db
 
 from flatblocks.models import FlatBlock
+from flatblocks.templatetags.flatblock_tags import do_get_flatblock
 from flatblocks import settings
 
 
@@ -100,16 +101,109 @@ class TagTests(TestCase):
     def testSyntax(self):
         tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" %}')
         tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block"'))
+        self.assertEquals('block', node.slug)
+        self.assertEquals(False, node.evaluated)
+
         tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" 123 %}')
         tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block" 123'))
+        self.assertEquals('block', node.slug)
+        self.assertEquals(False, node.evaluated)
+        self.assertEquals(123, node.cache_time)
+
         tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" using "flatblocks/flatblock.html" %}')
         tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block" using "flatblocks/flatblock.html"'))
+        self.assertEquals('block', node.slug)
+        self.assertEquals(False, node.evaluated)
+        self.assertEquals(0, node.cache_time)
+        self.assertEquals("flatblocks/flatblock.html", node.template_name)
+
         tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" 123 using "flatblocks/flatblock.html" %}')
         tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block" 123 using "flatblocks/flatblock.html"'))
+        self.assertEquals('block', node.slug)
+        self.assertEquals(False, node.evaluated)
+        self.assertEquals(123, node.cache_time)
+        self.assertEquals("flatblocks/flatblock.html", node.template_name)
+
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" evaluated %}')
+        tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block" evaluated'))
+        self.assertEquals('block', node.slug)
+        self.assertEquals(True, node.evaluated)
+        self.assertEquals(0, node.cache_time)
+
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" evaluated using "flatblocks/flatblock.html" %}')
+        tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block" evaluated using "flatblocks/flatblock.html"'))
+        self.assertEquals('block', node.slug)
+        self.assertEquals(True, node.evaluated)
+        self.assertEquals(0, node.cache_time)
+        self.assertEquals("flatblocks/flatblock.html", node.template_name)
+
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" 123 evaluated %}')
+        tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block" 123 evaluated'))
+        self.assertEquals(123, node.cache_time)
+        self.assertEquals(True, node.evaluated)
+
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "block" 123 evaluated using "flatblocks/flatblock.html" %}')
+        tpl.render(template.Context({}))
+        node = do_get_flatblock(None, template.Token('TOKEN_TEXT', 'flatblock "block" 123 evaluated using "flatblocks/flatblock.html"'))
+        self.assertEquals('block', node.slug)
+        self.assertEquals(True, node.evaluated)
+        self.assertEquals(123, node.cache_time)
+        self.assertEquals("flatblocks/flatblock.html", node.template_name)
+
 
     def testBlockAsVariable(self):
         tpl = template.Template('{% load flatblock_tags %}{% flatblock blockvar %}')
         tpl.render(template.Context({'blockvar': 'block'}))
+
+    def testContentEvaluation(self):
+        """
+        If a block is set in the template to be evaluated the actual content of the block is treated
+        as a Django template and receives the parent template's context.
+        """
+        FlatBlock.objects.create(
+             slug='tmpl_block',
+             header='HEADER',
+             content='{{ variable }}'
+        )
+        tpl = template.Template('{% load flatblock_tags %}{% plain_flatblock "tmpl_block" evaluated %}')
+        result = tpl.render(template.Context({'variable': 'value'}))
+        self.assertEquals('value', result)
+
+    def testDisabledEvaluation(self):
+        """
+        If "evaluated" is not passed, no evaluation should take place.
+        """
+        FlatBlock.objects.create(
+             slug='tmpl_block',
+             header='HEADER',
+             content='{{ variable }}'
+        )
+        tpl = template.Template('{% load flatblock_tags %}{% plain_flatblock "tmpl_block" %}')
+        result = tpl.render(template.Context({'variable': 'value'}))
+        self.assertEquals('{{ variable }}', result)
+
+    def testHeaderEvaluation(self):
+        """
+        Also the header should receive the context and get evaluated.
+        """
+        FlatBlock.objects.create(
+             slug='tmpl_block',
+             header='{{ header_variable }}',
+             content='{{ variable }}'
+        )
+        tpl = template.Template('{% load flatblock_tags %}{% flatblock "tmpl_block" evaluated %}')
+        result = tpl.render(template.Context({
+            'variable': 'value',
+            'header_variable': 'header-value'
+        }))
+        self.assertTrue('header-value' in result)
 
 
 class AutoCreationTest(TestCase):

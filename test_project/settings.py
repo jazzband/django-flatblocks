@@ -1,6 +1,7 @@
 import os
 import sys
 import logging
+from django.conf.global_settings import *
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -19,6 +20,10 @@ INSTALLED_APPS = (
     'flatblocks',
     'south'
 )
+TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
+        'django.core.context_processors.request',
+        'django.contrib.auth.context_processors.auth',
+        )
 LANGUAGE_CODE="en"
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
