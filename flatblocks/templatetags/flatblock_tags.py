@@ -56,6 +56,7 @@ logger = logging.getLogger(__name__)
 
 FlatBlock = models.get_model('flatblocks', 'flatblock')
 
+
 class BasicFlatBlockWrapper(object):
     def prepare(self, parser, token):
         """
@@ -92,7 +93,12 @@ class BasicFlatBlockWrapper(object):
             if args[0] != 'using':
                 # block, timeout, "evaluated"
                 if args[1] != 'evaluated':
-                    raise template.TemplateSyntaxError, "%r tag with two arguments has to include the cache timeout and the evaluated flag" % (tag_name,)
+                    raise template.TemplateSyntaxError("{0!r} tag with two "
+                                                       "arguments has to "
+                                                       "include the cache "
+                                                       "timeout and the "
+                                                       "evaluated flag".format(
+                                                           tag_name))
                 self.cache_time = args[0]
                 self.evaluated = True
             else:
@@ -110,7 +116,9 @@ class BasicFlatBlockWrapper(object):
             self.evaluated = True
             self.tpl_name = args[3]
         else:
-            raise template.TemplateSyntaxError, "%r tag should have between 1 and 5 arguments" % (tokens[0],)
+            raise template.TemplateSyntaxError("{0!r} tag should have between "
+                                               "1 and 5 arguments".format(
+                                                   tokens[0]))
         # Check to see if the slug is properly double/single quoted
         if not (self.slug[0] == self.slug[-1] and self.slug[0] in ('"', "'")):
             self.is_variable = True
@@ -118,7 +126,8 @@ class BasicFlatBlockWrapper(object):
             self.slug = self.slug[1:-1]
         # Clean up the template name
         if self.tpl_name is not None:
-            if not(self.tpl_name[0] == self.tpl_name[-1] and self.tpl_name[0] in ('"', "'")):
+            if not(self.tpl_name[0] == self.tpl_name[-1] and
+                    self.tpl_name[0] in ('"', "'")):
                 self.tpl_is_variable = True
             else:
                 self.tpl_name = self.tpl_name[1:-1]
@@ -128,21 +137,25 @@ class BasicFlatBlockWrapper(object):
     def __call__(self, parser, token):
         self.prepare(parser, token)
         return FlatBlockNode(self.slug, self.is_variable, self.cache_time,
-                template_name=self.tpl_name,
-                tpl_is_variable=self.tpl_is_variable,
-                evaluated=self.evaluated)
+                             template_name=self.tpl_name,
+                             tpl_is_variable=self.tpl_is_variable,
+                             evaluated=self.evaluated)
+
 
 class PlainFlatBlockWrapper(BasicFlatBlockWrapper):
     def __call__(self, parser, token):
         self.prepare(parser, token)
-        return FlatBlockNode(self.slug, self.is_variable, self.cache_time, False, evaluated=self.evaluated)
+        return FlatBlockNode(self.slug, self.is_variable, self.cache_time,
+                             False, evaluated=self.evaluated)
+
 
 do_get_flatblock = BasicFlatBlockWrapper()
 do_plain_flatblock = PlainFlatBlockWrapper()
 
+
 class FlatBlockNode(template.Node):
     def __init__(self, slug, is_variable, cache_time=0, with_template=True,
-            template_name=None, tpl_is_variable=False, evaluated=False):
+                 template_name=None, tpl_is_variable=False, evaluated=False):
         if template_name is None:
             self.template_name = 'flatblocks/flatblock.html'
         else:
@@ -185,17 +198,17 @@ class FlatBlockNode(template.Node):
                     flatblock = FlatBlock.objects.get(slug=real_slug)
                 else:
                     flatblock, _ = FlatBlock.objects.get_or_create(
-                                      slug=real_slug,
-                                      defaults = {'content': real_slug}
-                                   )
+                        slug=real_slug,
+                        defaults={'content': real_slug}
+                    )
                 if self.cache_time != 0:
                     if self.cache_time is None or self.cache_time == 'None':
-                        logger.debug("Caching %s for the cache's default timeout"
-                                % (real_slug,))
+                        logger.debug("Caching {0} for the cache's default "
+                                     "timeout".format(real_slug))
                         cache.set(cache_key, flatblock)
                     else:
-                        logger.debug("Caching %s for %s seconds" % (real_slug,
-                            str(self.cache_time)))
+                        logger.debug("Caching {0} for {1} seconds".format(
+                            real_slug, str(self.cache_time)))
                         cache.set(cache_key, flatblock, int(self.cache_time))
                 else:
                     logger.debug("Don't cache %s" % (real_slug,))
@@ -208,7 +221,7 @@ class FlatBlockNode(template.Node):
 
             if self.with_template:
                 tmpl = loader.get_template(real_template)
-                new_ctx.update({'flatblock':flatblock})
+                new_ctx.update({'flatblock': flatblock})
                 return tmpl.render(new_ctx)
             else:
                 return flatblock.content
