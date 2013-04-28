@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden,\
-                        HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 
 from flatblocks.models import FlatBlock
@@ -9,7 +9,7 @@ from flatblocks.forms import FlatBlockForm
 
 
 def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
-        template_name='flatblocks/edit.html', success_url=None):
+         template_name='flatblocks/edit.html', success_url=None):
     """
     This view provides a simple editor implementation for flatblocks.
 
@@ -20,7 +20,7 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
     The other entry point helps you check permissions: Pass a simple function
     via the ``permission_check`` keyword-argument in order to check
     permissions on the flatblock-level::
-        
+
         def my_perm_check(request, flatblock):
             return request.user.is_staff
 
@@ -42,14 +42,15 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
     if permission_check is not None:
         permcheck_result = permission_check(request, flatblock)
         if permcheck_result is False:
-            return HttpResponseForbidden(_('You are not allowed to edit this flatblock'))
+            return HttpResponseForbidden(
+                _('You are not allowed to edit this flatblock'))
         if isinstance(permcheck_result, HttpResponse):
             return permcheck_result
 
     session_key = 'flatblock.origin.%d' % (int(pk), )
     if request.method == 'POST':
         origin = request.session.get(session_key,
-                request.META.get('HTTP_REFERER', '/'))
+                                     request.META.get('HTTP_REFERER', '/'))
         form = modelform_class(request.POST, instance=flatblock)
         if form.is_valid():
             instance = form.save(commit=False)
@@ -61,11 +62,12 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
     else:
         origin = request.META.get('HTTP_REFERER', '/')
         # Don't set origin to this view's url no matter what
-        origin = origin == request.get_full_path() and request.session.get(session_key, '/') or origin
+        origin = origin == request.get_full_path() and \
+            request.session.get(session_key, '/') or origin
         form = modelform_class(instance=flatblock)
         request.session[session_key] = origin
     return render_to_response(template_name, {
         'form': form,
         'origin': origin,
         'flatblock': flatblock,
-        }, context_instance=RequestContext(request))
+    }, context_instance=RequestContext(request))
