@@ -14,4 +14,5 @@ Contributions by
     * James O'Donnell <http://squarefactor.com/words/>
     * Mikhail Korobov <http://github.com/kmike>
     * Henrik Heimbuerger <http://github.com/hheimbuerger>
+    * Alexander Ovchinnikov <alexander@entropia.us>
 
