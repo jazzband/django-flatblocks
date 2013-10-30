@@ -87,7 +87,7 @@ class TagTests(TestCase):
     def testExistingPlain(self):
         tpl = template.Template(
             '{% load flatblock_tags %}{% plain_flatblock "block" %}')
-        self.assertEqual(u'CONTENT', tpl.render(template.Context({})).strip())
+        self.assertEqual('CONTENT', tpl.render(template.Context({})).strip())
 
     def testExistingTemplate(self):
         expected = """<div class="flatblock block-block">
@@ -274,7 +274,7 @@ class AutoCreationTest(TestCase):
         """
         Tests if a missing block with hardcoded name won't be auto-created if
         feature is disabled"""
-        expected = u""
+        expected = ""
         settings.AUTOCREATE_STATIC_BLOCKS = False
         tpl = template.Template(
             '{% load flatblock_tags %}{% flatblock "block" %}')

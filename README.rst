@@ -178,10 +178,13 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
-0.7.0:
+0.8:
+    * Python 3 & Django 1.6 support
+
+0.7:
     * Support for evaluated blocks offering access to context variables
 
-0.6.0:
+0.6:
     * South support
     * Installation and upgrade instructions
 
