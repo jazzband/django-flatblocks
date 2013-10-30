@@ -49,12 +49,15 @@ class BasicTests(TestCase):
         block.save()
         self.assertEqual(None, cache.get(name))
 
-    def testSaveKwargs(self):
+    def testSaveForceUpdate(self):
         block = FlatBlock(slug='missing')
-#        block.slug = 'missing'
-        self.assertRaises(ValueError, block.save, force_update=True)
+        with self.assertRaises(ValueError):
+            block.save(force_update=True)
+
+    def testSaveForceInsert(self):
         block = FlatBlock.objects.get(slug='block')
-        self.assertRaises(db.IntegrityError, block.save, force_insert=True)
+        with self.assertRaises(db.IntegrityError):
+            block.save(force_insert=True)
 
     def testCacheRemoval(self):
         """
