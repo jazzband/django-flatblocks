@@ -1,4 +1,10 @@
-from distutils.core import setup
+try:
+    from setuptools import setup
+    kws = {'install_requires': ['Django']}
+except:
+    from distutils.core import setup
+    kws = {}
+
 
 setup(
     name='django-flatblocks',
@@ -40,7 +46,5 @@ setup(
             'locale/*/*/*.po',
         ]
     },
-    install_requires=[
-        'Django',
-    ]
+    **kws
 )
