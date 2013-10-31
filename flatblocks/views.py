@@ -1,6 +1,5 @@
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseForbidden
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 
@@ -57,8 +56,8 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
             instance.slug = flatblock.slug
             instance.save()
             del request.session[session_key]
-            redirect_to = success_url and success_url or origin
-            return HttpResponseRedirect(redirect_to)
+            redirect_to = success_url if success_url else origin
+            return redirect(redirect_to)
     else:
         origin = request.META.get('HTTP_REFERER', '/')
         # Don't set origin to this view's url no matter what
@@ -66,8 +65,8 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
             request.session.get(session_key, '/') or origin
         form = modelform_class(instance=flatblock)
         request.session[session_key] = origin
-    return render_to_response(template_name, {
+    return render(request, template_name, {
         'form': form,
         'origin': origin,
         'flatblock': flatblock,
-    }, context_instance=RequestContext(request))
+    })

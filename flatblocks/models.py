@@ -1,7 +1,10 @@
+
+from django.core.cache import cache
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
-from django.core.cache import cache
 
 from flatblocks.settings import CACHE_PREFIX
 
@@ -17,12 +20,11 @@ class FlatBlock(models.Model):
                             verbose_name=_('Slug'),
                             help_text=_("A unique name used for reference in "
                                         "the templates"))
-    header = models.CharField(blank=True, null=True, max_length=255,
+    header = models.CharField(blank=True, max_length=255,
                               verbose_name=_('Header'),
                               help_text=_("An optional header for this "
                                           "content"))
-    content = models.TextField(verbose_name=_('Content'), blank=True,
-                               null=True)
+    content = models.TextField(verbose_name=_('Content'), blank=True)
 
     # Helper attributes used if content should be evaluated in order to
     # represent the original content.
@@ -32,16 +34,11 @@ class FlatBlock(models.Model):
     def __str__(self):
         return self.slug
 
-    def save(self, *args, **kwargs):
-        super(FlatBlock, self).save(*args, **kwargs)
-        # Now also invalidate the cache used in the templatetag
-        cache.delete('%s%s' % (CACHE_PREFIX, self.slug, ))
-
-    def delete(self, *args, **kwargs):
-        cache_key = '%s%s' % (CACHE_PREFIX, self.slug,)
-        super(FlatBlock, self).delete(*args, **kwargs)
-        cache.delete(cache_key)
-
     class Meta:
         verbose_name = _('Flat block')
         verbose_name_plural = _('Flat blocks')
+
+@reciever([post_save, post_delete], sender=FlatBlock)
+def clear_flatblock_cache(sender, instance, **kwargs):
+    cache_key = '%s%s' % (CACHE_PREFIX, instance.slug)
+    cache.delete(cache_key)
