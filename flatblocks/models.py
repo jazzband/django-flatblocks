@@ -38,7 +38,7 @@ class FlatBlock(models.Model):
         verbose_name = _('Flat block')
         verbose_name_plural = _('Flat blocks')
 
-@reciever([post_save, post_delete], sender=FlatBlock)
+@receiver([post_save, post_delete], sender=FlatBlock)
 def clear_flatblock_cache(sender, instance, **kwargs):
     cache_key = '%s%s' % (CACHE_PREFIX, instance.slug)
     cache.delete(cache_key)
