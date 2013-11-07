@@ -6,6 +6,7 @@ Extended by
     * Peter Baumgardner <http://lincolnloop.com/blog>
     * Kevin Fricovsky <http://blog.howiworkdaily.com/>
     * Horst Gutmann <http://zerokspot.com/>
+    * Curtis Maloney (FunkyBob)
 
 Contributions by
 

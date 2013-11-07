@@ -70,9 +70,9 @@ of seconds, the that block should be cached::
 Additionally you can also specify which template should be used to render the
 flatblock::
     
-    {% flatblock "page.info" using "my_template.html" %}
+    {% flatblock "page.info" using="my_template.html" %}
     # ...
-    {% flatblock "page.about" 3600 using "my_template.html" %}
+    {% flatblock "page.about" 3600 using="my_template.html" %}
 
 As with the slug of the flatblock also with the template name you have the
 choice of using the literal name of the template or pass it to the templatetag
@@ -81,14 +81,14 @@ as a variable.
 The content of a flatblock (as well as its header) can also be evaluated as a
 full-fledged Django template::
     
-    {% flatblock "page.info" evaluated %}
+    {% flatblock "page.info" evaluated=True %}
 
 This also works with the other parameters like the cache timeout and the
 custom template::
     
 
-    {% flatblock "page.info" evaluated using "my_template.html" %}
-    {% flatblock "page.about" 3600 evaluated using "my_template.html" %}
+    {% flatblock "page.info" evaluated=True using="my_template.html" %}
+    {% flatblock "page.about" 3600 evaluated=True using="my_template.html" %}
 
 
 edit-view

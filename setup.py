@@ -1,14 +1,9 @@
-try:
-    from setuptools import setup
-    kws = {'install_requires': ['Django']}
-except:
-    from distutils.core import setup
-    kws = {}
+from setuptools import setup, find_packages
 
 
 setup(
     name='django-flatblocks',
-    version='0.8',
+    version='0.9',
     description='django-flatblocks acts like django.contrib.flatpages but '
                 'for parts of a page; like an editable help box you want '
                 'show alongside the main content.',
@@ -36,9 +31,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
-    packages=['flatblocks', 'flatblocks.management',
-              'flatblocks.management.commands', 'flatblocks.migrations',
-              'flatblocks.templatetags'],
+    packages=find_packages('flatblocks'),
     package_data={
         'flatblocks': [
             'templates/flatblocks/*.html',
@@ -46,5 +39,9 @@ setup(
             'locale/*/*/*.po',
         ]
     },
+    zip_safe=False,
+    requires = [
+        'Django (>=1.4)',
+    ],
     **kws
 )
