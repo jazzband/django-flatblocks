@@ -43,5 +43,4 @@ setup(
     requires = [
         'Django (>=1.4)',
     ],
-    **kws
 )
