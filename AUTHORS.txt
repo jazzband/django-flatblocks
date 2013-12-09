@@ -6,6 +6,7 @@ Extended by
     * Peter Baumgardner <http://lincolnloop.com/blog>
     * Kevin Fricovsky <http://blog.howiworkdaily.com/>
     * Horst Gutmann <http://zerokspot.com/>
+    * Curtis Maloney (FunkyBob)
 
 Contributions by
 
@@ -14,4 +15,5 @@ Contributions by
     * James O'Donnell <http://squarefactor.com/words/>
     * Mikhail Korobov <http://github.com/kmike>
     * Henrik Heimbuerger <http://github.com/hheimbuerger>
+    * Alexander Ovchinnikov <alexander@entropia.us>
 

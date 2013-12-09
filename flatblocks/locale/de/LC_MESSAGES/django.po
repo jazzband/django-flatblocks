@@ -1,33 +1,45 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-26 08:58+0700\n"
 "Last-Translator: Horst Gutmann <zerok@zerokspot.com>\n"
 "Language-Team: de <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgid "You are not allowed to edit this flatblock"
-msgstr "Du darfst diesen Flatblock nicht editieren"
-
+#: models.py:15
 msgid "Slug"
 msgstr "Slug"
 
+#: models.py:16
+msgid "A unique name used for reference in the templates"
+msgstr ""
+"Ein eindeutiger Name, über den dieser Block in Templates referenziert werden "
+"kann"
+
+#: models.py:19
 msgid "Header"
 msgstr "Überschrift"
 
-msgid "Content"
-msgstr "Inhalt"
-
-msgid "A unique name used for reference in the templates"
-msgstr "Ein eindeutiger Name, über den dieser Block in Templates referenziert werden kann"
-
+#: models.py:20
 msgid "An optional header for this content"
 msgstr "Eine optionale Überschrift für diesen Block"
 
+#: models.py:22
+msgid "Content"
+msgstr "Inhalt"
+
+#: models.py:44
 msgid "Flat block"
 msgstr "Flatblock"
 
+#: models.py:45
 msgid "Flat blocks"
 msgstr "Flatblocks"
 
+#: views.py:46
+msgid "You are not allowed to edit this flatblock"
+msgstr "Du darfst diesen Flatblock nicht editieren"

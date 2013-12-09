@@ -3,6 +3,7 @@
 *.db
 .*.swp
 ._*
+.idea
 README.html
 local_settings.py
 django_flatblocks.egg-info
