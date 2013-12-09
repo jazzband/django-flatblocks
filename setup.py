@@ -31,7 +31,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
-    packages=find_packages('flatblocks'),
+    packages=['flatblocks', 'flatblocks.management',
+              'flatblocks.management.commands', 'flatblocks.migrations',
+              'flatblocks.templatetags'],
     package_data={
         'flatblocks': [
             'templates/flatblocks/*.html',
@@ -40,7 +42,7 @@ setup(
         ]
     },
     zip_safe=False,
-    requires = [
+    requires=[
         'Django (>=1.4)',
     ],
 )
