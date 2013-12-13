@@ -6,6 +6,35 @@ websites. Think about it like ``django.contrib.flatpages`` just not for a
 whole page but for only parts of it, like an information text describing what
 you can do on a site.
 
+Installation
+------------
+
+Probably the easiest way to install this application is to first run `pip
+install django-flatblocks`.  Once this step is complete add "flatblocks" to
+your INSTALLED_APPS setting in your settings.py file and run `python manage.py
+syncdb` to update your database.
+
+
+Upgrading
+---------
+
+django-flatblocks uses `South`_ for handling data and schema migrations
+starting with version 0.6.0, so the South-typical update path applies here.
+
+If you're upgrading from a 0.5.x version or earlier you will have to migrate
+in 3 steps:
+
+1. Install south.
+
+2. Migrate your database to the first version of flatblocks using South::
+
+   ./manage.py migrate flatblocks 0001 --fake
+
+3. Then migrate your dataabase to the latest version of flatblocks' database
+   and data structure::
+
+   ./manage.py migrate flatblocks
+
 Usage
 ------------
 
@@ -41,13 +70,26 @@ of seconds, the that block should be cached::
 Additionally you can also specify which template should be used to render the
 flatblock::
     
-    {% flatblock "page.info" using "my_template.html" %}
+    {% flatblock "page.info" using="my_template.html" %}
     # ...
-    {% flatblock "page.about" 3600 using "my_template.html" %}
+    {% flatblock "page.about" 3600 using="my_template.html" %}
 
 As with the slug of the flatblock also with the template name you have the
 choice of using the literal name of the template or pass it to the templatetag
 as a variable.
+
+The content of a flatblock (as well as its header) can also be evaluated as a
+full-fledged Django template::
+    
+    {% flatblock "page.info" evaluated=True %}
+
+This also works with the other parameters like the cache timeout and the
+custom template::
+    
+
+    {% flatblock "page.info" evaluated=True using="my_template.html" %}
+    {% flatblock "page.about" 3600 evaluated=True using="my_template.html" %}
+
 
 edit-view
 ---------
@@ -136,6 +178,19 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.8:
+    * Python 3 & Django 1.6 support
+
+0.7:
+    * Support for evaluated blocks offering access to context variables
+
+0.6:
+    * South support
+    * Installation and upgrade instructions
+
+    Note: This is primarily a transitional release to get South in here and
+    open this project up for some database changes in the future.
+
 0.5.1
     * Removed rendering of the content attribute from the admin list by Michael Fladischer
     * PyBabel compatibility by Michael Fladischer
@@ -183,3 +238,4 @@ Releases
 .. _`django-chunks`: http://code.google.com/p/django-chunks/
 .. _`django-better-chunks`: http://bitbucket.org/hakanw/django-better-chunks/
 .. _`forked by Peter Baumgardner`: http://github.com/lincolnloop/django-flatblock/
+.. _`south`: http://south.aeracode.org/
