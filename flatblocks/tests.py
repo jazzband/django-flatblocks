@@ -1,6 +1,5 @@
 from django import template
 from django.test import TestCase
-from django.core.cache import cache
 from django.contrib.auth.models import User
 from django import db
 
@@ -34,20 +33,6 @@ class BasicTests(TestCase):
         self.assertEqual(get_tmpl(self.client.get('/edit/1/')).name,
                          'flatblocks/edit.html')
 
-    def testCacheReset(self):
-        """
-        Tests if FlatBlock.save() resets the cache.
-        """
-        tpl = template.Template(
-            '{% load flatblock_tags %}{% flatblock "block" 60 %}')
-        tpl.render(template.Context({}))
-        cache_key = ':'.join(['block', 'False', 'flatblocks/flatblock.html'])
-        self.assertNotEqual(None, cache.get(cache_key))
-        block = FlatBlock.objects.get(slug='block')
-        block.header = 'UPDATED'
-        block.save()
-        #self.assertEqual(None, cache.get(cache_key))
-
     def testSaveForceUpdate(self):
         block = FlatBlock(slug='missing')
         with self.assertRaises(ValueError):
@@ -57,21 +42,6 @@ class BasicTests(TestCase):
         block = FlatBlock.objects.get(slug='block')
         with self.assertRaises(db.IntegrityError):
             block.save(force_insert=True)
-
-    def testCacheRemoval(self):
-        """
-        If a block is deleted it should also be removed from the cache.
-        """
-        block = FlatBlock(slug="test", content="CONTENT")
-        block.save()
-        tpl = template.Template(
-            '{% load flatblock_tags %}{% flatblock "test" 100 %}')
-        # We fill the cache by rendering the block
-        tpl.render(template.Context({}))
-        cache_key = ':'.join(['test', 'False', 'flatblocks/flatblock.html'])
-        self.assertNotEqual(None, cache.get(cache_key))
-        block.delete()
-        #self.assertEqual(None, cache.get(cache_key))
 
 
 class TagTests(TestCase):

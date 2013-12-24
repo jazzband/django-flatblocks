@@ -3,23 +3,28 @@ This module offers one templatetag called "flatblock" which allows you to
 easily embed small text-snippets (like for example the help section of a page)
 into a template.
 
-It accepts 2 parameter:
+It requires one argument, and accepts several extra keywords:
 
-    slug
-        The slug/key of the text (for example 'contact_help'). There are two
-        ways you can pass the slug to the templatetag: (1) by its name or
-        (2) as a variable.
+    {% flatblock {slug} [evaluated={bool}] [using={template}] %}
 
-        If you want to pass it by name, you have to use quotes on it.
-        Otherwise just use the variable name.
+    slug::
+        The slug/key of the text (for example 'contact_help').
 
-    cache_time
-        The number of seconds that text should get cached after it has been
-        fetched from the database.
+    evaluated::
+        If set to True, the content and header of the FlatBlock will be
+        rendered as a Template before being passed to the template.
 
-        This field is optional and defaults to no caching (0).
+        This allows you to embed template tags into your FlatBlocks.
 
-        To use Django's default caching length use None.
+        The original values for the content and header will be saved to
+        raw_content and raw_header respectively.
+
+    using::
+        The template to render the FlatBlock with.  If not supplied, will
+        default to "flatblocks/flatblock.html".
+
+        If set to False, will not be used, and the output of the tag will be
+        the ``content`` property of the FlatBlock.
 
 Example::
 
@@ -45,7 +50,6 @@ from django import template
 from django.template import loader
 from django.template.loader import render_to_string
 from django.db import models
-from django.core.cache import cache
 
 from flatblocks import settings
 
@@ -59,14 +63,7 @@ FlatBlock = models.get_model('flatblocks', 'flatblock')
 
 
 @register.simple_tag(takes_context=True)
-def flatblock(context, slug, timeout=None, evaluated=False, using='flatblocks/flatblock.html'):
-
-    if timeout:
-        # Build Key from slug/evaluated/using
-        cache_key = ':'.join(map(str, [slug, evaluated, using]))
-        result = cache.get(cache_key)
-        if result is not None:
-            return result
+def flatblock(context, slug, evaluated=False, using='flatblocks/flatblock.html'):
 
     if not settings.AUTOCREATE_STATIC_BLOCKS:
         try:
@@ -74,8 +71,7 @@ def flatblock(context, slug, timeout=None, evaluated=False, using='flatblocks/fl
         except FlatBlock.DoesNotExist:
             return ''
     else:
-        flatblock, _ = FlatBlock.objects.get_or_create(
-            slug=slug,
+        flatblock, _ = FlatBlock.objects.get_or_create(slug=slug,
             defaults={'content': slug}
         )
 
@@ -86,18 +82,13 @@ def flatblock(context, slug, timeout=None, evaluated=False, using='flatblocks/fl
         flatblock.header = template.Template(flatblock.header).render(context)
 
     if using:
-        context.update({'flatblock': flatblock})
-        result = render_to_string(using, context)
-        context.pop()
+        result = render_to_string(using, {'flatblock': flatblock}, context)
     else:
         result = flatblock.content
-
-    if timeout:
-        cache.set(cache_key, result, timeout=float(timeout))
 
     return result
 
 @register.simple_tag(takes_context=True)
-def plain_flatblock(context, slug, timeout=None, evaluated=False):
-    return flatblock(context, slug, timeout=timeout, evaluated=evaluated, using=None)
+def plain_flatblock(context, slug, evaluated=False):
+    return flatblock(context, slug, evaluated=evaluated, using=None)
 
