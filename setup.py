@@ -31,7 +31,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
-    packages=find_packages('flatblocks'),
+    packages=find_packages(exclude=['test_project']),
     package_data={
         'flatblocks': [
             'templates/flatblocks/*.html',
