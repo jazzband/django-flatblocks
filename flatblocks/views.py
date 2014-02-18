@@ -38,7 +38,7 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
     If everything is alright with the permissions, simply return True.
     """
     flatblock = get_object_or_404(FlatBlock, pk=pk)
-    if permission_check is not None:
+    if permission_check:
         permcheck_result = permission_check(request, flatblock)
         if permcheck_result is False:
             return HttpResponseForbidden(
@@ -61,8 +61,11 @@ def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,
     else:
         origin = request.META.get('HTTP_REFERER', '/')
         # Don't set origin to this view's url no matter what
-        origin = origin == request.get_full_path() and \
-            request.session.get(session_key, '/') or origin
+        origin = (
+            request.session.get(session_key, '/')
+            if origin == request.get_full_path()
+            else origin
+        )
         form = modelform_class(instance=flatblock)
         request.session[session_key] = origin
     return render(request, template_name, {
