@@ -2,17 +2,17 @@ django-flatblocks
 =================
 
 django-flatblocks is a simple application for handling small text-blocks on
-websites. Think about it like ``django.contrib.flatpages`` just not for a 
+websites. Think about it like ``django.contrib.flatpages`` just not for a
 whole page but for only parts of it, like an information text describing what
 you can do on a site.
 
 Installation
 ------------
 
-Probably the easiest way to install this application is to first run `pip
-install django-flatblocks`.  Once this step is complete add "flatblocks" to
-your INSTALLED_APPS setting in your settings.py file and run `python manage.py
-syncdb` to update your database.
+Probably the easiest way to install this application is to first run ``pip
+install django-flatblocks``.  Once this step is complete add ``flatblocks`` to
+your ``INSTALLED_APPS`` setting in your settings.py file and run ``python manage.py
+syncdb`` to update your database.
 
 
 Upgrading
@@ -39,11 +39,13 @@ Usage
 ------------
 
 Once you've created some instances of the ``flatblocks.models.FlatBlock``
-model, you can load it it using the ``flatblock_tags`` templatetag-library::
-    
-    {% load flatblock_tags %}
-    
-    <html>
+model, you can load it it using the ``flatblock_tags`` templatetag-library
+
+.. code-block:: html+django
+
+   {% load flatblock_tags %}
+
+   <html>
         <head>
             <!-- ... -->
         </head>
@@ -59,19 +61,23 @@ model, you can load it it using the ``flatblock_tags`` templatetag-library::
         </body>
     </html>
 
-This way you can display a text block with the name 'page.info'. If you 
+This way you can display a text block with the name 'page.info'. If you
 have the name of a block in a template variable, leave out the quotes.
 
 This tag also accepts an optional argument where you can specify the number
-of seconds, the that block should be cached::
-    
+of seconds, the that block should be cached
+
+.. code-block:: django
+
     {% flatblock "page.info" 3600 %}
 
 Additionally you can also specify which template should be used to render the
-flatblock::
-    
+flatblock
+
+.. code-block:: html+django
+
     {% flatblock "page.info" using="my_template.html" %}
-    # ...
+    <!-- ... -->
     {% flatblock "page.about" 3600 using="my_template.html" %}
 
 As with the slug of the flatblock also with the template name you have the
@@ -79,13 +85,16 @@ choice of using the literal name of the template or pass it to the templatetag
 as a variable.
 
 The content of a flatblock (as well as its header) can also be evaluated as a
-full-fledged Django template::
-    
+full-fledged Django template
+
+.. code-block:: django
+
     {% flatblock "page.info" evaluated=True %}
 
 This also works with the other parameters like the cache timeout and the
-custom template::
-    
+custom template
+
+.. code-block:: django
 
     {% flatblock "page.info" evaluated=True using="my_template.html" %}
     {% flatblock "page.about" 3600 evaluated=True using="my_template.html" %}
@@ -99,8 +108,10 @@ your flatblocks from your frontend. To use it simply include it in your
 URLconf and create a ``flatblocks/edit.html`` template.
 
 By default the view doesn't do any permission checking, so you should decorate
-it accordingly in your URLconf::
-    
+it accordingly in your URLconf
+
+.. code-block:: python
+
     from flatblocks.views import edit
     from django.contrib.auth.decorators import login_required
 
@@ -138,37 +149,40 @@ arguments:
 ``permission_check``
     This argument lets you specify a callback function to do some
     flatblock-specific permission checking. Such a function could look like
-    this::
-        
-        def my_permcheck(request, flatblock):
-            if request.user.is_staff or flatblock.slug == 'free_for_all':
-                return True
-            return HttpResponseRedirect('/')
-    
-    With this permission callback set, a user that is not a staff-user is not
-    allowed to edit this view unless it's the "free_for_all" block. If these
-    criteria are not met, the user is redirected to the root URL of the page. 
+    this
 
-    The contract here is pretty simple. The permission callback should return
-    ``False``, if the user should receive a 403 message when trying to edit
-    this link. If the function returns an instance of ``HttpResponse`` the
-    view will proceed from the assumption that your view already did
-    everything there is to do and return that response-object. Any other
-    return value tells the view that the permissions are OK for the current
-    user and that it should proceed.
+.. code-block:: python
+
+    def my_permcheck(request, flatblock):
+        if request.user.is_staff or flatblock.slug == 'free_for_all':
+            return True
+        return HttpResponseRedirect('/')
+
+
+With this permission callback set, a user that is not a staff-user is not
+allowed to edit this view unless it's the "free_for_all" block. If these
+criteria are not met, the user is redirected to the root URL of the page.
+
+The contract here is pretty simple. The permission callback should return
+``False``, if the user should receive a 403 message when trying to edit
+this link. If the function returns an instance of ``HttpResponse`` the
+view will proceed from the assumption that your view already did
+everything there is to do and return that response-object. Any other
+return value tells the view that the permissions are OK for the current
+user and that it should proceed.
 
 
 History
 ------------
 
-Since this application targets use-cases that are basically applicable to 
+Since this application targets use-cases that are basically applicable to
 most web-projects out there, there are tons of solutions similar to this one.
-In fact, this app is a fork originally from `django-chunks`_ developed by 
+In fact, this app is a fork originally from `django-chunks`_ developed by
 Clint Ecker.
 
 In November 2008 Kevin Fricovsky created the `original fork`_ in order to add
-an additional "active"-flag to each chunk. That project was later on `forked 
-by Peter Baumgardner`_ who removed that flag again and added a "header"-field 
+an additional "active"-flag to each chunk. That project was later on `forked
+by Peter Baumgardner`_ who removed that flag again and added a "header"-field
 in order to directly associate and optional title with each text block.
 
 This fork aims now to add more features like variable chunks and also
