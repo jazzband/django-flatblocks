@@ -87,7 +87,7 @@ def flatblock(context, slug, evaluated=False, using='flatblocks/flatblock.html')
 
     return result
 
+
 @register.simple_tag(takes_context=True)
 def plain_flatblock(context, slug, evaluated=False):
     return flatblock(context, slug, evaluated=evaluated, using=None)
-
