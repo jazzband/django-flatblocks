@@ -23,7 +23,11 @@ if not settings.configured:
             'flatblocks',
             'tests',
         ),
-        ROOT_URLCONF = 'tests.urls'
+        ROOT_URLCONF='tests.urls',
+        MIDDLEWARE_CLASSES=(
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+        )
     )
 
 
