@@ -14,37 +14,34 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         save_nodes = (len(args) and args[0] == 'create')
-        templ_list = []
-        flatblock_nodes = []
+        flatblock_nodes = set()
         print_nodes = []
 
-        #get list of templates
+        # get list of templates
         for templ_dir in settings.TEMPLATE_DIRS:
-            templ_list += [os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser(templ_dir)) for f in fn]
+            for path, dirlist, fnlist in os.walk(templ_dir):
+                for fn in fnlist:
+                    try:
+                        t = get_template(os.path.join(path, fn))
+                        flatblock_nodes.update(
+                            flatblock_nodes.update(node.slug for node in t.nodelist.get_nodes_by_type(FlatBlockNode)
+                            )
+                        )
+                    except:
+                        # Should log at debug level?
+                        pass
 
-        #load templates and get FlatBlockNode slugs
-        for templ in templ_list:
-            try:
-                t = get_template(templ)
-                flatblock_nodes += [node.slug for node in t.nodelist.get_nodes_by_type(FlatBlockNode)]
-            except:
-                pass
-
-        #distinct slugs
-        flatblock_nodes = list(set(flatblock_nodes))
-
-        #check if flatblocks have entry in database
+        # check if flatblocks have entry in database
         for node in flatblock_nodes:
-            if FlatBlock.objects.filter(slug=node).count() == 0:
-                #if create argument was supplied, save empty nodes
+            if not FlatBlock.objects.filter(slug=node).exists():
+                # if create argument was supplied, save empty nodes
                 if save_nodes:
-                    block = FlatBlock(header="[{0}]".format(node), content="Generated flatblock", slug=node)
-                    block.save()
+                    FlatBlock.objects.create(header="[{0}]".format(node), content="Generated flatblock", slug=node)
                 print_nodes.append(node)
 
-        if len(print_nodes):
+        if print_nodes:
             if save_nodes:
-                print "Following nodes were created:"
-            print "\n".join(print_nodes)
+                self.stdout.write("Following nodes were created:")
+            self.stdout.write("\n".join(print_nodes))
         else:
-            print "All FlatBlock items are in database"
+            self.stdout.write("All FlatBlock items are in database")
