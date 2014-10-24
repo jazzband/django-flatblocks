@@ -57,8 +57,7 @@ class TagTests(TestCase):
         tpl.render(template.Context({}))
 
     def testExistingPlain(self):
-        tpl = template.Template(
-            '{% load flatblocks %}{% plain_flatblock "block" %}')
+        tpl = template.Template('{% load flatblocks %}{% plain_flatblock "block" %}')
         self.assertEqual('CONTENT', tpl.render(template.Context({})).strip())
 
     def testExistingTemplate(self):
@@ -139,9 +138,8 @@ class AutoCreationTest(TestCase):
 
     <div class="flatblock-content">foo</div>
 </div>"""
+        tpl = template.Template('{% load flatblocks %}{% flatblock "foo" %}')
         settings.AUTOCREATE_STATIC_BLOCKS = True
-        tpl = template.Template(
-            '{% load flatblocks %}{% flatblock "foo" %}')
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
         self.assertEqual(FlatBlock.objects.count(), 1)
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
