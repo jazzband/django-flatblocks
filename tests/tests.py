@@ -53,12 +53,12 @@ class TagTests(TestCase):
 
     def testLoadingTaglib(self):
         """Tests if the taglib defined in this app can be loaded"""
-        tpl = template.Template('{% load flatblock_tags %}')
+        tpl = template.Template('{% load flatblocks %}')
         tpl.render(template.Context({}))
 
     def testExistingPlain(self):
         tpl = template.Template(
-            '{% load flatblock_tags %}{% plain_flatblock "block" %}')
+            '{% load flatblocks %}{% plain_flatblock "block" %}')
         self.assertEqual('CONTENT', tpl.render(template.Context({})).strip())
 
     def testExistingTemplate(self):
@@ -69,20 +69,19 @@ class TagTests(TestCase):
     <div class="flatblock-content">CONTENT</div>
 </div>
 """
-        tpl = template.Template(
-            '{% load flatblock_tags %}{% flatblock "block" %}')
+        tpl = template.Template('{% load flatblocks %}{% flatblock "block" %}')
         self.assertEqual(expected, tpl.render(template.Context({})))
 
     def testUsingMissingTemplate(self):
         tpl = template.Template(
-            '{% load flatblock_tags %}'
+            '{% load flatblocks %}'
             '{% flatblock "block" using="missing_template.html" %}')
         exception = template.base.TemplateDoesNotExist
         self.assertRaises(exception, tpl.render, template.Context({}))
 
     def testBlockAsVariable(self):
         tpl = template.Template(
-            '{% load flatblock_tags %}{% flatblock blockvar %}')
+            '{% load flatblocks %}{% flatblock blockvar %}')
         tpl.render(template.Context({'blockvar': 'block'}))
 
     def testContentEvaluation(self):
@@ -96,7 +95,7 @@ class TagTests(TestCase):
                                  content='{{ variable }}'
                                  )
         tpl = template.Template(
-            '{% load flatblock_tags %}'
+            '{% load flatblocks %}'
             '{% plain_flatblock "tmpl_block" evaluated=True %}')
         result = tpl.render(template.Context({'variable': 'value'}))
         self.assertEqual('value', result)
@@ -110,7 +109,7 @@ class TagTests(TestCase):
                                  content='{{ variable }}'
                                  )
         tpl = template.Template(
-            '{% load flatblock_tags %}{% plain_flatblock "tmpl_block" %}')
+            '{% load flatblocks %}{% plain_flatblock "tmpl_block" %}')
         result = tpl.render(template.Context({'variable': 'value'}))
         self.assertEqual('{{ variable }}', result)
 
@@ -123,7 +122,7 @@ class TagTests(TestCase):
                                  content='{{ variable }}'
                                  )
         tpl = template.Template(
-            '{% load flatblock_tags %}{% flatblock "tmpl_block" evaluated=True %}')
+            '{% load flatblocks %}{% flatblock "tmpl_block" evaluated=True %}')
         result = tpl.render(template.Context({
             'variable': 'value',
             'header_variable': 'header-value'
@@ -142,7 +141,7 @@ class AutoCreationTest(TestCase):
 </div>"""
         settings.AUTOCREATE_STATIC_BLOCKS = True
         tpl = template.Template(
-            '{% load flatblock_tags %}{% flatblock "foo" %}')
+            '{% load flatblocks %}{% flatblock "foo" %}')
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
         self.assertEqual(FlatBlock.objects.count(), 1)
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
@@ -155,7 +154,7 @@ class AutoCreationTest(TestCase):
         expected = ""
         settings.AUTOCREATE_STATIC_BLOCKS = False
         tpl = template.Template(
-            '{% load flatblock_tags %}{% flatblock "block" %}')
+            '{% load flatblocks %}{% flatblock "block" %}')
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
         self.assertEqual(FlatBlock.objects.filter(slug='block').count(), 0)
 
@@ -165,6 +164,6 @@ class AutoCreationTest(TestCase):
         string
         """
         settings.AUTOCREATE_STATIC_BLOCKS = True
-        tpl = template.Template('{% load flatblock_tags %}{% flatblock name %}')
+        tpl = template.Template('{% load flatblocks %}{% flatblock name %}')
         output = tpl.render(template.Context({'name': 'foo'})).strip()
         self.assertEqual('', output)

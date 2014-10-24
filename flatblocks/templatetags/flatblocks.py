@@ -45,6 +45,7 @@ can easily for example offer administrative operations (like editing)
 within that template.
 
 """
+from __future__ import absolute_import
 
 from django import template
 from django.template.loader import render_to_string
