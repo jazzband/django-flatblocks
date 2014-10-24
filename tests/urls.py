@@ -7,5 +7,5 @@ from django.shortcuts import render
 urlpatterns = patterns('',
     url('^flatblocks/', include("flatblocks.urls")),
     url('^admin/', include(admin.site.urls)),
-    url('^/?', render, {'template_name': 'index.html'}),
+    url('^$', render, {'template_name': 'index.html'}),
 )
