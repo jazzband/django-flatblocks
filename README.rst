@@ -41,7 +41,7 @@ Usage
 Once you've created some instances of the ``flatblocks.models.FlatBlock``
 model, you can load it it using the ``flatblock_tags`` templatetag-library::
 
-    {% load flatblock_tags %}
+    {% load flatblock %}
 
     <html>
         <head>
