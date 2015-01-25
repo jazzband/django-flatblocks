@@ -19,19 +19,11 @@ class BasicTests(TestCase):
                                                    'adminpwd')
 
     def testURLConf(self):
-        # We have to support two different APIs here (1.1 and 1.2)
-        def get_tmpl(resp):
-            if hasattr(resp, 'templates'):
-                return resp.templates[0]
-            else:
-                if isinstance(resp.template, list):
-                    return resp.template[0]
-                return resp.template
-        self.assertEqual(get_tmpl(self.client.get('/edit/1/')).name,
-                         'admin/login.html')
+        resp = self.client.get('/edit/1/')
+        self.assertTemplateUsed(resp, 'admin/login.html')
         self.client.login(username='admin', password='adminpwd')
-        self.assertEqual(get_tmpl(self.client.get('/edit/1/')).name,
-                         'flatblocks/edit.html')
+        resp = self.client.get('/edit/1/')
+        self.assertTemplateUsed(resp, 'flatblocks/edit.html')
 
     def testSaveForceUpdate(self):
         block = FlatBlock(slug='missing')
