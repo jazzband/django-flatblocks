@@ -8,7 +8,6 @@ from flatblocks import settings
 
 
 class BasicTests(TestCase):
-    urls = 'flatblocks.urls'
 
     def setUp(self):
         self.testblock = FlatBlock.objects.create(slug='block',
@@ -19,10 +18,10 @@ class BasicTests(TestCase):
                                                    'adminpwd')
 
     def testURLConf(self):
-        resp = self.client.get('/edit/1/')
+        resp = self.client.get('/flatblocks/edit/1/', follow=True)
         self.assertTemplateUsed(resp, 'admin/login.html')
         self.client.login(username='admin', password='adminpwd')
-        resp = self.client.get('/edit/1/')
+        resp = self.client.get('/flatblocks/edit/1/')
         self.assertTemplateUsed(resp, 'flatblocks/edit.html')
 
     def testSaveForceUpdate(self):
