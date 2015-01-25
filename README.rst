@@ -88,7 +88,7 @@ full-fledged Django template:
 
     {% flatblock "page.info" evaluated=True %}
 
-This also works with the other parameters like the custom template::
+This also works with the other parameters like the custom template:
 
 .. code-block:: django
 
