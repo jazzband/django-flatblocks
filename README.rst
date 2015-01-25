@@ -10,7 +10,7 @@ Installation
 ------------
 
 Probably the easiest way to install this application is to first run `pip
-install django-flatblocks`.  Once this step is complete add "flatblocks" to
+install django-flatblocks`.  Once this step is complete add ``flatblocks`` to
 your INSTALLED_APPS setting in your settings.py file and run `python manage.py
 syncdb` to update your database.
 
@@ -28,10 +28,14 @@ in 3 steps:
 
 2. Migrate your database to the first version of flatblocks using South::
 
+.. code-block:: sh
+
    ./manage.py migrate flatblocks 0001 --fake
 
 3. Then migrate your dataabase to the latest version of flatblocks' database
    and data structure::
+
+.. code-block:: sh
 
    ./manage.py migrate flatblocks
 
@@ -40,6 +44,8 @@ Usage
 
 Once you've created some instances of the ``flatblocks.models.FlatBlock``
 model, you can load it it using the ``flatblock_tags`` templatetag-library::
+
+.. code-block:: html+django
 
     {% load flatblock %}
 
@@ -65,8 +71,10 @@ have the name of a block in a template variable, leave out the quotes.
 Additionally you can also specify which template should be used to render the
 flatblock::
 
+.. code-block:: django
+
     {% flatblock "page.info" using="my_template.html" %}
-    # ...
+    <!-- -->
     {% flatblock "page.about" using="my_template.html" %}
 
 As with the slug of the flatblock also with the template name you have the
@@ -76,9 +84,13 @@ as a variable.
 The content of a flatblock (as well as its header) can also be evaluated as a
 full-fledged Django template::
 
+.. code-block:: django
+
     {% flatblock "page.info" evaluated=True %}
 
 This also works with the other parameters like the custom template::
+
+.. code-block:: django
 
     {% flatblock "page.info" evaluated=True using="my_template.html" %}
 
@@ -92,6 +104,8 @@ URLconf and create a ``flatblocks/edit.html`` template.
 
 By default the view doesn't do any permission checking, so you should decorate
 it accordingly in your URLconf::
+
+.. code-block:: python
 
     from flatblocks.views import edit
     from django.contrib.auth.decorators import login_required
