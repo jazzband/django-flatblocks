@@ -40,7 +40,7 @@ in 3 steps:
       ./manage.py migrate flatblocks
 
 Usage
-------------
+-----
 
 Once you've created some instances of the ``flatblocks.models.FlatBlock``
 model, you can load it it using the ``flatblock_tags`` templatetag-library:
@@ -145,7 +145,7 @@ arguments:
     This argument lets you specify a callback function to do some
     flatblock-specific permission checking. Such a function could look like
     this:
-    
+
     .. code-block:: python
 
         def my_permcheck(request, flatblock):
@@ -167,7 +167,7 @@ arguments:
 
 
 History
-------------
+-------
 
 Since this application targets use-cases that are basically applicable to
 most web-projects out there, there are tons of solutions similar to this one.
