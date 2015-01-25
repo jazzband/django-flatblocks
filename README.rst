@@ -188,6 +188,7 @@ Releases
 
 0.9:
     NOTE: Major tag syntax changes!
+
     * Modernised to use simple_tag and standard kwarg syntax.
     * Removed caching - use {% cache %} tag instead
 
