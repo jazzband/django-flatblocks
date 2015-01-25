@@ -26,24 +26,24 @@ in 3 steps:
 
 1. Install south.
 
-2. Migrate your database to the first version of flatblocks using South::
+2. Migrate your database to the first version of flatblocks using South:
 
-.. code-block:: sh
+   .. code-block:: sh
 
-   ./manage.py migrate flatblocks 0001 --fake
+      ./manage.py migrate flatblocks 0001 --fake
 
 3. Then migrate your dataabase to the latest version of flatblocks' database
-   and data structure::
+   and data structure:
 
-.. code-block:: sh
+   .. code-block:: sh
 
-   ./manage.py migrate flatblocks
+      ./manage.py migrate flatblocks
 
 Usage
 ------------
 
 Once you've created some instances of the ``flatblocks.models.FlatBlock``
-model, you can load it it using the ``flatblock_tags`` templatetag-library::
+model, you can load it it using the ``flatblock_tags`` templatetag-library:
 
 .. code-block:: html+django
 
@@ -69,7 +69,7 @@ This way you can display a text block with the name 'page.info'. If you
 have the name of a block in a template variable, leave out the quotes.
 
 Additionally you can also specify which template should be used to render the
-flatblock::
+flatblock:
 
 .. code-block:: django
 
@@ -82,7 +82,7 @@ choice of using the literal name of the template or pass it to the templatetag
 as a variable.
 
 The content of a flatblock (as well as its header) can also be evaluated as a
-full-fledged Django template::
+full-fledged Django template:
 
 .. code-block:: django
 
@@ -103,7 +103,7 @@ your flatblocks from your frontend. To use it simply include it in your
 URLconf and create a ``flatblocks/edit.html`` template.
 
 By default the view doesn't do any permission checking, so you should decorate
-it accordingly in your URLconf::
+it accordingly in your URLconf:
 
 .. code-block:: python
 
@@ -144,7 +144,9 @@ arguments:
 ``permission_check``
     This argument lets you specify a callback function to do some
     flatblock-specific permission checking. Such a function could look like
-    this::
+    this:
+    
+    .. code-block:: python
 
         def my_permcheck(request, flatblock):
             if request.user.is_staff or flatblock.slug == 'free_for_all':
