@@ -43,11 +43,11 @@ Usage
 -----
 
 Once you've created some instances of the ``flatblocks.models.FlatBlock``
-model, you can load it it using the ``flatblock_tags`` templatetag-library:
+model, you can load it it using the ``flatblocks`` templatetag-library:
 
 .. code-block:: html+django
 
-    {% load flatblock %}
+    {% load flatblocks %}
 
     <html>
         <head>
