@@ -32,7 +32,7 @@ in 3 steps:
 
       ./manage.py migrate flatblocks 0001 --fake
 
-3. Then migrate your dataabase to the latest version of flatblocks' database
+3. Then migrate your database to the latest version of flatblocks' database
    and data structure:
 
    .. code-block:: sh
