@@ -63,7 +63,8 @@ FlatBlock = models.get_model('flatblocks', 'flatblock')
 
 
 @register.simple_tag(takes_context=True)
-def flatblock(context, slug, evaluated=False, using='flatblocks/flatblock.html'):
+def flatblock(context, slug, evaluated=False,
+              using='flatblocks/flatblock.html'):
 
     if not settings.AUTOCREATE_STATIC_BLOCKS:
         try:

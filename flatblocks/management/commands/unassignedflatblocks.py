@@ -24,7 +24,9 @@ class Command(BaseCommand):
                     try:
                         t = get_template(os.path.join(path, fn))
                         flatblock_nodes.update(
-                            flatblock_nodes.update(node.slug for node in t.nodelist.get_nodes_by_type(FlatBlockNode)
+                            flatblock_nodes.update(
+                                node.slug
+                                for node in t.nodelist.get_nodes_by_type(FlatBlockNode)
                             )
                         )
                     except:
@@ -36,7 +38,9 @@ class Command(BaseCommand):
             if not FlatBlock.objects.filter(slug=node).exists():
                 # if create argument was supplied, save empty nodes
                 if save_nodes:
-                    FlatBlock.objects.create(header="[{0}]".format(node), content="Generated flatblock", slug=node)
+                    FlatBlock.objects.create(header="[{0}]".format(node),
+                                             content="Generated flatblock",
+                                             slug=node)
                 print_nodes.append(node)
 
         if print_nodes:
