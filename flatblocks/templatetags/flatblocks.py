@@ -47,19 +47,25 @@ within that template.
 """
 from __future__ import absolute_import
 
-from django import template
+from django import template, VERSION
 from django.template.loader import render_to_string
-from django.db import models
 
 from flatblocks import settings
 
 import logging
 
+if VERSION >= (1, 7):
+    from django.apps import apps
+    get_model = apps.get_model
+else:
+    from django.db import models
+    get_model = models.get_model
+
 
 register = template.Library()
 logger = logging.getLogger(__name__)
 
-FlatBlock = models.get_model('flatblocks', 'flatblock')
+FlatBlock = get_model('flatblocks', 'flatblock')
 
 
 @register.simple_tag(takes_context=True)
