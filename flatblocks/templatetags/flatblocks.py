@@ -47,12 +47,11 @@ within that template.
 """
 from __future__ import absolute_import
 
-from django import template, VERSION
-from django.template.loader import render_to_string
-
-from flatblocks import settings
-
 import logging
+
+from django import VERSION, template
+from django.template.loader import render_to_string
+from flatblocks import settings
 
 if VERSION >= (1, 7):
     from django.apps import apps

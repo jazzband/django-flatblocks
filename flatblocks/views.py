@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
-
-from flatblocks.models import FlatBlock
 from flatblocks.forms import FlatBlockForm
+from flatblocks.models import FlatBlock
 
 
 def edit(request, pk, modelform_class=FlatBlockForm, permission_check=None,

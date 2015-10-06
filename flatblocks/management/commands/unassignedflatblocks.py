@@ -1,12 +1,10 @@
 import os
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.template.loader import get_template
-
-from django.conf import settings
-
-from flatblocks.templatetags.flatblock_tags import FlatBlockNode
 from flatblocks.models import FlatBlock
+from flatblocks.templatetags.flatblock_tags import FlatBlockNode
 
 
 class Command(BaseCommand):

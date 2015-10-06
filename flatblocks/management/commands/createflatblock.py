@@ -1,6 +1,5 @@
 from django.core.management import BaseCommand, CommandError
 from django.db import IntegrityError
-
 from flatblocks.models import FlatBlock
 
 
