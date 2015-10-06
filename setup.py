@@ -32,7 +32,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
-    packages=find_packages(exclude=['test_project']),
+    packages=find_packages(exclude=['tests']),
     package_data={
         'flatblocks': [
             'templates/flatblocks/*.html',
