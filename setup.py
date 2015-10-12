@@ -1,3 +1,5 @@
+import io
+
 from setuptools import setup, find_packages
 
 
@@ -7,7 +9,7 @@ setup(
     description='django-flatblocks acts like django.contrib.flatpages but '
                 'for parts of a page; like an editable help box you want '
                 'show alongside the main content.',
-    long_description=open('README.rst').read(),
+    long_description=io.open('README.rst', encoding='utf-8').read(),
     keywords='django apps',
     license='New BSD License',
     author='Horst Gutmann, Curtis Maloney',
