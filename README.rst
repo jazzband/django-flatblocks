@@ -188,6 +188,10 @@ Releases
 
 0.9.2:
     * Fixed reading of README in setup.py
+    * Dropped Django 1.4 testing
+    * Tidied code with flake8 and isort
+    * Fix support for Django 1.7+
+    * Fix packaging to exclude tests module
 
 0.9.1:
     * Dropped testing of Django 1.5 and 1.6
