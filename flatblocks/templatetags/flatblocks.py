@@ -88,7 +88,8 @@ def flatblock(context, slug, evaluated=False,
         flatblock.header = template.Template(flatblock.header).render(context)
 
     if using:
-        result = render_to_string(using, {'flatblock': flatblock}, context)
+        with context.push(flatblock=flatblock):
+            result = render_to_string(using, context)
     else:
         result = flatblock.content
 
