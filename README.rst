@@ -77,6 +77,19 @@ flatblock:
     <!-- -->
     {% flatblock "page.about" using="my_template.html" %}
 
+If you want to simply output the value of the ``content`` field of a flatblock
+without using any template, you can use either options:
+
+.. code-block:: django
+
+    {% flatblock "page.info" using=False %}
+
+or
+
+.. code-block:: django
+
+    {% plain_flatblock "page.info" %}
+
 As with the slug of the flatblock also with the template name you have the
 choice of using the literal name of the template or pass it to the templatetag
 as a variable.
@@ -88,11 +101,14 @@ full-fledged Django template:
 
     {% flatblock "page.info" evaluated=True %}
 
-This also works with the other parameters like the custom template:
+This also works with the other parameters like the custom template and with
+the ``plain_flatblock`` templatetag:
 
 .. code-block:: django
 
     {% flatblock "page.info" evaluated=True using="my_template.html" %}
+    <!-- -->
+    {% plain_flatblock "page.about" evaluated=True %}
 
 
 edit-view
