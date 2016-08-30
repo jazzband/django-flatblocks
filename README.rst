@@ -186,6 +186,9 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
+0.9.3:
+    * Fixed Django 1.10 compatibility
+
 0.9.2:
     * Fixed reading of README in setup.py
     * Dropped Django 1.4 testing
