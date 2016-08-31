@@ -66,7 +66,7 @@ class TagTests(TestCase):
         tpl = template.Template(
             '{% load flatblocks %}'
             '{% flatblock "block" using="missing_template.html" %}')
-        exception = template.base.TemplateDoesNotExist
+        exception = template.TemplateDoesNotExist
         self.assertRaises(exception, tpl.render, template.Context({}))
 
     def testBlockAsVariable(self):
