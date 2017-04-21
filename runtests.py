@@ -34,7 +34,10 @@ if not settings.configured:
                 'DIRS': [],
                 'APP_DIRS': True,
                 'OPTIONS': {
-                    'debug': True
+                    'debug': True,
+                    'context_processors': [
+                        'django.contrib.auth.context_processors.auth',
+                    ],
                 }
             },
         ],
