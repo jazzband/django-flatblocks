@@ -10,6 +10,7 @@ env:
   - DJANGO="Django<1.9"
   - DJANGO="Django<1.10"
   - DJANGO="Django<1.11"
+  - DJANGO="Django<1.12"
 
 install:
   - pip install $DJANGO
@@ -27,3 +28,5 @@ matrix:
       python: "3.3"
     - env: DJANGO="Django<1.11"
       python: "pypy3"
+    - env: DJANGO="Django<1.12"
+      python: "3.3"
