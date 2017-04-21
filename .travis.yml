@@ -30,3 +30,5 @@ matrix:
       python: "pypy3"
     - env: DJANGO="Django<1.12"
       python: "3.3"
+    - env: DJANGO="Django<1.12"
+      python: "pypy3"
