@@ -21,6 +21,10 @@ script:
 
 matrix:
   exclude:
+    - env: DJANGO="Django~=1.7.0"
+      python: "3.5"
+    - env: DJANGO="Django~=1.7.0"
+      python: "3.6"
     - env: DJANGO="Django~=1.10.0"
       python: "pypy3"
     - env: DJANGO="Django~=1.11.0"
