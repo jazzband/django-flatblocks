@@ -5,6 +5,6 @@ from django.shortcuts import render
 
 urlpatterns = [
     url('^flatblocks/', include("flatblocks.urls")),
-    url('^admin/', include(admin.site.urls)),
+    url('^admin/', admin.site.urls),
     url('^$', render, {'template_name': 'index.html'}),
 ]
