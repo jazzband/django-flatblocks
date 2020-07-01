@@ -16,4 +16,4 @@ Contributions by
     * Mikhail Korobov <http://github.com/kmike>
     * Henrik Heimbuerger <http://github.com/hheimbuerger>
     * Alexander Ovchinnikov <alexander@entropia.us>
-
+    * Craig Anderson <http://craiga.id.au/>
