@@ -9,3 +9,6 @@ local_settings.py
 django_flatblocks.egg-info
 dist
 build
+.tox
+coverage.xml
+.coverage

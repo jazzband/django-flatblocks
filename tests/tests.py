@@ -8,48 +8,46 @@ from flatblocks import settings
 
 
 class BasicTests(TestCase):
-
     def setUp(self):
-        self.testblock = FlatBlock.objects.create(slug='block',
-                                                  header='HEADER',
-                                                  content='CONTENT'
-                                                  )
-        self.admin = User.objects.create_superuser('admin', 'admin@localhost',
-                                                   'adminpwd')
+        self.testblock = FlatBlock.objects.create(
+            slug="block", header="HEADER", content="CONTENT"
+        )
+        self.admin = User.objects.create_superuser(
+            "admin", "admin@localhost", "adminpwd"
+        )
 
     def testURLConf(self):
-        resp = self.client.get('/flatblocks/edit/1/', follow=True)
-        self.assertTemplateUsed(resp, 'admin/login.html')
-        self.client.login(username='admin', password='adminpwd')
-        resp = self.client.get('/flatblocks/edit/1/')
-        self.assertTemplateUsed(resp, 'flatblocks/edit.html')
+        resp = self.client.get("/flatblocks/edit/1/", follow=True)
+        self.assertTemplateUsed(resp, "admin/login.html")
+        self.client.login(username="admin", password="adminpwd")
+        resp = self.client.get("/flatblocks/edit/1/")
+        self.assertTemplateUsed(resp, "flatblocks/edit.html")
 
     def testSaveForceUpdate(self):
-        block = FlatBlock(slug='missing')
+        block = FlatBlock(slug="missing")
         with self.assertRaises(ValueError):
             block.save(force_update=True)
 
     def testSaveForceInsert(self):
-        block = FlatBlock.objects.get(slug='block')
+        block = FlatBlock.objects.get(slug="block")
         with self.assertRaises(db.IntegrityError):
             block.save(force_insert=True)
 
 
 class TagTests(TestCase):
     def setUp(self):
-        self.testblock = FlatBlock.objects.create(slug='block',
-                                                  header='HEADER',
-                                                  content='CONTENT'
-                                                  )
+        self.testblock = FlatBlock.objects.create(
+            slug="block", header="HEADER", content="CONTENT"
+        )
 
     def testLoadingTaglib(self):
         """Tests if the taglib defined in this app can be loaded"""
-        tpl = template.Template('{% load flatblocks %}')
+        tpl = template.Template("{% load flatblocks %}")
         tpl.render(template.Context({}))
 
     def testExistingPlain(self):
         tpl = template.Template('{% load flatblocks %}{% plain_flatblock "block" %}')
-        self.assertEqual('CONTENT', tpl.render(template.Context({})).strip())
+        self.assertEqual("CONTENT", tpl.render(template.Context({})).strip())
 
     def testExistingTemplate(self):
         expected = """<div class="flatblock block-block">
@@ -64,15 +62,15 @@ class TagTests(TestCase):
 
     def testUsingMissingTemplate(self):
         tpl = template.Template(
-            '{% load flatblocks %}'
-            '{% flatblock "block" using="missing_template.html" %}')
+            "{% load flatblocks %}"
+            '{% flatblock "block" using="missing_template.html" %}'
+        )
         exception = template.TemplateDoesNotExist
         self.assertRaises(exception, tpl.render, template.Context({}))
 
     def testBlockAsVariable(self):
-        tpl = template.Template(
-            '{% load flatblocks %}{% flatblock blockvar %}')
-        tpl.render(template.Context({'blockvar': 'block'}))
+        tpl = template.Template("{% load flatblocks %}{% flatblock blockvar %}")
+        tpl.render(template.Context({"blockvar": "block"}))
 
     def testContentEvaluation(self):
         """
@@ -80,44 +78,42 @@ class TagTests(TestCase):
         the block is treated as a Django template and receives the parent
         template's context.
         """
-        FlatBlock.objects.create(slug='tmpl_block',
-                                 header='HEADER',
-                                 content='{{ variable }}'
-                                 )
+        FlatBlock.objects.create(
+            slug="tmpl_block", header="HEADER", content="{{ variable }}"
+        )
         tpl = template.Template(
-            '{% load flatblocks %}'
-            '{% plain_flatblock "tmpl_block" evaluated=True %}')
-        result = tpl.render(template.Context({'variable': 'value'}))
-        self.assertEqual('value', result)
+            "{% load flatblocks %}" '{% plain_flatblock "tmpl_block" evaluated=True %}'
+        )
+        result = tpl.render(template.Context({"variable": "value"}))
+        self.assertEqual("value", result)
 
     def testDisabledEvaluation(self):
         """
         If "evaluated" is not passed, no evaluation should take place.
         """
-        FlatBlock.objects.create(slug='tmpl_block',
-                                 header='HEADER',
-                                 content='{{ variable }}'
-                                 )
+        FlatBlock.objects.create(
+            slug="tmpl_block", header="HEADER", content="{{ variable }}"
+        )
         tpl = template.Template(
-            '{% load flatblocks %}{% plain_flatblock "tmpl_block" %}')
-        result = tpl.render(template.Context({'variable': 'value'}))
-        self.assertEqual('{{ variable }}', result)
+            '{% load flatblocks %}{% plain_flatblock "tmpl_block" %}'
+        )
+        result = tpl.render(template.Context({"variable": "value"}))
+        self.assertEqual("{{ variable }}", result)
 
     def testHeaderEvaluation(self):
         """
         Also the header should receive the context and get evaluated.
         """
-        FlatBlock.objects.create(slug='tmpl_block',
-                                 header='{{ header_variable }}',
-                                 content='{{ variable }}'
-                                 )
+        FlatBlock.objects.create(
+            slug="tmpl_block", header="{{ header_variable }}", content="{{ variable }}"
+        )
         tpl = template.Template(
-            '{% load flatblocks %}{% flatblock "tmpl_block" evaluated=True %}')
-        result = tpl.render(template.Context({
-            'variable': 'value',
-            'header_variable': 'header-value'
-        }))
-        self.assertTrue('header-value' in result)
+            '{% load flatblocks %}{% flatblock "tmpl_block" evaluated=True %}'
+        )
+        result = tpl.render(
+            template.Context({"variable": "value", "header_variable": "header-value"})
+        )
+        self.assertTrue("header-value" in result)
 
 
 class AutoCreationTest(TestCase):
@@ -142,10 +138,9 @@ class AutoCreationTest(TestCase):
         feature is disabled"""
         expected = ""
         settings.AUTOCREATE_STATIC_BLOCKS = False
-        tpl = template.Template(
-            '{% load flatblocks %}{% flatblock "block" %}')
+        tpl = template.Template('{% load flatblocks %}{% flatblock "block" %}')
         self.assertEqual(expected, tpl.render(template.Context({})).strip())
-        self.assertEqual(FlatBlock.objects.filter(slug='block').count(), 0)
+        self.assertEqual(FlatBlock.objects.filter(slug="block").count(), 0)
 
     def _testMissingVariableBlock(self):
         """
@@ -153,6 +148,6 @@ class AutoCreationTest(TestCase):
         string
         """
         settings.AUTOCREATE_STATIC_BLOCKS = True
-        tpl = template.Template('{% load flatblocks %}{% flatblock name %}')
-        output = tpl.render(template.Context({'name': 'foo'})).strip()
-        self.assertEqual('', output)
+        tpl = template.Template("{% load flatblocks %}{% flatblock name %}")
+        output = tpl.render(template.Context({"name": "foo"})).strip()
+        self.assertEqual("", output)
