@@ -3,8 +3,8 @@ name: Test
 on: [push, pull_request]
 
 jobs:
-  name: build (Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }})
   build:
+    name: build (Python ${{ matrix.python-version }}, Django ${{ matrix.django-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
