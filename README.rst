@@ -1,6 +1,17 @@
 django-flatblocks
 =================
 
+.. image:: https://jazzband.co/static/img/badge.svg
+   :target: https://jazzband.co/
+   :alt: Jazzband
+
+.. image:: https://github.com/jazzband/django-flatblocks/workflows/Test/badge.svg
+   :target: https://github.com/jazzband/django-flatblocks/actions
+   :alt: GitHub Actions
+
+.. image:: https://codecov.io/gh/jazzband/django-flatblocks/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/jazzband/django-flatblocks
+
 django-flatblocks is a simple application for handling small text-blocks on
 websites. Think about it like ``django.contrib.flatpages`` just not for a
 whole page but for only parts of it, like an information text describing what
@@ -201,6 +212,15 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 
 Releases
 --------
+
+Unreleased:
+    * Support for Django 2.2, 3.0 and 3.1.
+    * Support for Python 3.6, 3.7, 3.8 and 3.9.
+    * Moved CI to GitHub Actions: https://github.com/jazzband/django-flatblocks/actions
+
+0.9.4:
+    * Drop Python 3.3 support.
+    * Add support for Django 1.11.
 
 0.9.3:
     * Fixed Django 1.10 compatibility
