@@ -213,10 +213,12 @@ the `django-better-chunks`_ fork (``django.contrib.site``- and i18n-support).
 Releases
 --------
 
-Unreleased:
-    * Support for Django 2.2, 3.0 and 3.1.
-    * Support for Python 3.6, 3.7, 3.8 and 3.9.
-    * Moved CI to GitHub Actions: https://github.com/jazzband/django-flatblocks/actions
+1.0.0:
+    * Add support for Django 2.2, 3.0, and 3.1.
+    * Add support for Python 3.6, 3.7, 3.8 and 3.9.
+    * Remove support for Django 1.7, 1.8, 1.9, 1.10, and 1.11.
+    * Remove support for Python 3.4 and 3.5.
+    * Move CI to GitHub Actions: https://github.com/jazzband/django-flatblocks/actions
 
 0.9.4:
     * Drop Python 3.3 support.
