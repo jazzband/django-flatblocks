@@ -1,3 +1,6 @@
+Unreleased:
+    * Add support for Python 3.10.
+
 1.0.0:
     * Add support for Django 2.2, 3.0, and 3.1.
     * Add support for Python 3.6, 3.7, 3.8 and 3.9.
