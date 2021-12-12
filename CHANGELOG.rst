@@ -1,4 +1,5 @@
 Unreleased:
+    * Add support for Django 3.2 and 4.0.
     * Add support for Python 3.10.
 
 1.0.0:
