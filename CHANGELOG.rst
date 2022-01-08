@@ -3,6 +3,7 @@ Unreleased:
     * Add support for Python 3.10.
     * Remove support for Django 2.0, 2.2, 3.0, and 3.1.
     * Remove support for Python 3.6.
+    * Change default primary key to use BigAutoField.
 
 1.0.0:
     * Add support for Django 2.2, 3.0, and 3.1.
